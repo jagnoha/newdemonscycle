@@ -17,6 +17,21 @@
           "bucketName": "demons-cycle-storage202642-devt",
           "region": "us-east-1"
         }
+      },
+      "auth": {
+        "newdemonsproject": {
+          "userPoolId": "us-east-1_g5BnZpomi",
+          "userPoolName": "cognitocf0c6096_userpool_cf0c6096-devt",
+          "webClientId": "7sbb03b4ub38itumestvqet8i6",
+          "nativeClientId": "7sbb03b4ub38itumestvqet8i6",
+          "identityPoolId": "us-east-1:87b672a8-1be6-4739-8592-503ce468d83c",
+          "identityPoolName": "cognitocf0c6096_identitypool_cf0c6096__devt",
+          "allowUnauthenticatedIdentities": false,
+          "authRoleArn": "arn:aws:iam::695119725440:role/amplify-authcra-devt-202642-authRole",
+          "authRoleName": "amplify-authcra-devt-202642-authRole",
+          "unauthRoleArn": "arn:aws:iam::695119725440:role/amplify-authcra-devt-202642-unauthRole",
+          "unauthRoleName": "amplify-authcra-devt-202642-unauthRole"
+        }
       }
     }
   }
