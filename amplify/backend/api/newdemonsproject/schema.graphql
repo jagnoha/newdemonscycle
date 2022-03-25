@@ -1,0 +1,116 @@
+type SubCategory2 @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn" }) @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  type: String @default(value: "SubCategory2")
+  deleted: Boolean @default(value: "false")
+  createdOn: AWSDateTime!
+  updatedOn: AWSDateTime!
+}
+
+type EbayStoreCategory @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn" }) @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  code: String
+  type: String @default(value: "EbayStoreCategory")
+  deleted: Boolean @default(value: "false")
+  createdOn: AWSDateTime!
+  updatedOn: AWSDateTime!
+}
+
+type Manufacturer @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn" }) @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  type: String @default(value: "Manufacturer")
+  deleted: Boolean @default(value: "false")
+  createdOn: AWSDateTime!
+  updatedOn: AWSDateTime!
+}
+
+type Brand @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn" }) @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  type: String @default(value: "Brand")
+  deleted: Boolean @default(value: "false")
+  createdOn: AWSDateTime!
+  updatedOn: AWSDateTime!
+}
+
+type SubCategory @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn" }) @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  type: String @default(value: "SubCategory")
+  deleted: Boolean @default(value: "false")
+  createdOn: AWSDateTime!
+  updatedOn: AWSDateTime!
+}
+
+type Category @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn" }) @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  type: String @default(value: "Category")
+  deleted: Boolean @default(value: "false")
+  createdOn: AWSDateTime!
+  updatedOn: AWSDateTime!
+}
+
+type Attribute @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn" }) @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  type: String @default(value: "Attribute")
+  deleted: Boolean @default(value: "false")
+  createdOn: AWSDateTime!
+  updatedOn: AWSDateTime!
+}
+
+type Product @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn" }) @auth(rules: [{allow: public}]) @searchable {
+  id: ID!
+  SKU: String
+  legacyID: String
+  mpn: String
+  type: String @default(value: "Product") @index(name: "byTypeAndUpdatedOn", sortKeyFields: ["updatedOn"] queryField: "productByTypeAndUpdatedOn") @index(name: "byTypeAndCreatedOn", sortKeyFields: ["createdOn"] queryField: "productByTypeAndCreatedOn") @index(name: "byTypeAndPrice", sortKeyFields: ["priceMSRP"] queryField: "productByTypeAndPrice") @index(name: "byTypeAndCost", sortKeyFields: ["cost"] queryField: "productByTypeAndCost")  @index(name: "byTypeAndSKU", sortKeyFields: ["SKU"] queryField: "productByTypeAndSKU") @index(name: "byTypeAndMPN", sortKeyFields: ["mpn"] queryField: "productByTypeAndMPN")
+  Attributes: String
+  parentSKU: String
+  brandID: ID
+  manufacturerID: ID
+  categoryID: ID
+  subcategoryID: ID
+  subcategory2ID: ID
+  ebaystorecategoryID: ID
+  sourceDropship: Boolean @default(value: "false")
+  sourceWarehouse: Boolean @default(value: "false")
+  images: String @default(value: "[]")
+  handle: String 
+  bulletPoints: String @default(value: "[]")
+  weight: Float @default(value: "0")
+  dimensionalWeight: Float @default(value: "0")
+  appliedWeight: Float @default(value: "0")
+  status: String @default(value: "Draft")
+  updateFlag: Boolean @default(value: "false")
+  binLocation: String
+  titleStore: String
+  titleEbay: String
+  titleAmazon: String
+  descriptionStore: String
+  descriptionEbay: String
+  descriptionAmazon: String
+  dimensionHeight: Float @default(value: "0")
+  dimensionLength: Float @default(value: "0")
+  dimensionWidth: Float @default(value: "0")
+  priceMSRP: Float @default(value: "0")
+  priceMAP: Float @default(value: "0")
+  priceStore: Float @default(value: "0")
+  priceEbay: Float @default(value: "0")
+  priceAmazon: Float @default(value: "0")
+  priceWholesaleLow: Float @default(value: "0")
+  priceWholesaleHigh: Float @default(value: "0")
+  priceScratchLow: Float @default(value: "0")
+  priceScratchHigh: Float   @default(value: "0")
+  cost: Float @default(value: "0")
+  shopifyFitmentTags: String
+  shopifyMetaDescription: String
+  shopifyMetaTitle: String
+  shopifyOnlyTags: String
+  deleted: Boolean @default(value: "false")
+  createdOn: AWSDateTime!
+  updatedOn: AWSDateTime!
+}

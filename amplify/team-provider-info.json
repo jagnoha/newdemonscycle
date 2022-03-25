@@ -1,0 +1,23 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-newdemonsproject-staging-205026-authRole",
+      "UnauthRoleArn": "arn:aws:iam::695119725440:role/amplify-newdemonsproject-staging-205026-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::695119725440:role/amplify-newdemonsproject-staging-205026-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-newdemonsproject-staging-205026-deployment",
+      "UnauthRoleName": "amplify-newdemonsproject-staging-205026-unauthRole",
+      "StackName": "amplify-newdemonsproject-staging-205026",
+      "StackId": "arn:aws:cloudformation:us-east-1:695119725440:stack/amplify-newdemonsproject-staging-205026/b8918090-9bfc-11ec-ac91-0ab070b10b83",
+      "AmplifyAppId": "dcqr1lb1xlsmz"
+    },
+    "categories": {
+      "storage": {
+        "newdemonsproject32ec58ee": {
+          "bucketName": "demons-cycle-storage202642-devt",
+          "region": "us-east-1"
+        }
+      }
+    }
+  }
+}
