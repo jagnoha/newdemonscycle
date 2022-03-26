@@ -3,7 +3,7 @@ backend:
   phases:
     build:
       commands:
-        - chmod u+x ./myamplifyPush.sh
+        - chmod u+x ./myamplifypush.sh
         - ./myamplifyPush.sh
 frontend:
   phases:
