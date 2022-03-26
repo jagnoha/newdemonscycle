@@ -99,19 +99,7 @@ CODEGEN="{\
 }"
 CATEGORIES=""
 if [[ -z ${AMPLIFY_FACEBOOK_CLIENT_ID} && -z ${AMPLIFY_GOOGLE_CLIENT_ID} && -z ${AMPLIFY_AMAZON_CLIENT_ID} ]]; then
-    if [[ -z ${AMPLIFY_USERPOOL_ID} && -z ${AMPLIFY_WEBCLIENT_ID} && -z ${AMPLIFY_NATIVECLIENT_ID} && -z ${AMPLIFY_IDENTITYPOOL_ID} ]]; then
-        CATEGORIES=""
-    else
-        AUTHCONFIG="{\
-        \"userPoolId\":\"${AMPLIFY_USERPOOL_ID}\",\
-        \"webClientId\":\"${AMPLIFY_WEBCLIENT_ID}\",\
-        \"nativeClientId\":\"${AMPLIFY_NATIVECLIENT_ID}\"\
-        \"identityPoolId\":\"${AMPLIFY_IDENTITYPOOL_ID}\"\
-        }"
-        CATEGORIES="{\
-        \"auth\":$AUTHCONFIG\
-        }"
-    fi
+    CATEGORIES=""
 else
     AUTHCONFIG="{\
     \"facebookAppIdUserPool\":\"${AMPLIFY_FACEBOOK_CLIENT_ID}\",\
