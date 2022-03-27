@@ -103,6 +103,7 @@ if [[ -z ${AMPLIFY_FACEBOOK_CLIENT_ID} && -z ${AMPLIFY_GOOGLE_CLIENT_ID} && -z $
     \"userPoolId\":\"${AMPLIFY_USERPOOL_ID}\",\
     \"webClientId\":\"${AMPLIFY_WEBCLIENT_ID}\",\
     \"nativeClientId\":\"${AMPLIFY_NATIVECLIENT_ID}\"\
+    \"identityPoolId\":\"${AMPLIFY_IDENTITYPOOL_ID}\"\
     }"
     CATEGORIES="{\
     \"auth\":$AUTHCONFIG\
