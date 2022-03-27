@@ -3,7 +3,8 @@ backend:
   phases:
     build:
       commands:
-        - amplifyPush -e $AWS_BRANCH --simple
+        - chmod u+x ./myamplifypush_v2.sh
+        - ./myamplifypush_v2.sh --simple
 frontend:
   phases:
     preBuild:
