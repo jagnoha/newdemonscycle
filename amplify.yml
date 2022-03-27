@@ -3,8 +3,8 @@ backend:
   phases:
     build:
       commands:
-        - chmod u+x ./myamplifypush.sh
-        - ./myamplifypush.sh --simple
+        - chmod u+x ./myamplifypush_v2.sh
+        - ./myamplifypush_v2.sh --simple
 frontend:
   phases:
     preBuild:
