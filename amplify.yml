@@ -1,9 +1,13 @@
 version: 1
 backend:
   phases:
+    preBuild:
+      commands:
+        - chmod u+x ./scripts/amplify-push.sh
     build:
       commands:
-        - amplifyPush --simple
+        - ./scripts/amplify-push.sh
+        - amplify push --yes
 frontend:
   phases:
     preBuild:
