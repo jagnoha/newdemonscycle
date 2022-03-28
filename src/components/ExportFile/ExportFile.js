@@ -213,9 +213,7 @@ export default function ExportFile(props) {
                   dimensionWidth
                   dimensionalWeight
                   handle
-                  images {
-                    image1
-                  }
+                  images
                   mpn
                   parentSKU
                   priceStore
@@ -276,7 +274,7 @@ export default function ExportFile(props) {
                 let height = item.dimensionHeight ? item.dimensionHeight : "" 
                 let length = item.dimensionLength ? item.dimensionLength : ""
                 let width = item.dimensionWidth ? item.dimensionWidth : ""
-                let image = item.images && item.images.image1 ? JSON.parse(item.images.image1).data_url : ""
+                let image = "" //item.images && item.images.image1 ? JSON.parse(item.images.image1).data_url : ""
                 let MSRP = item.priceMSRP ? item.priceMSRP : ""
                 let listPrice = ""
                 let myStore = item.priceStore ? item.priceStore : ""
