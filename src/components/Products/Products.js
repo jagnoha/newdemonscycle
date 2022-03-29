@@ -1291,11 +1291,16 @@ const handleFilter = async (incr, productsByPage, statusFilter, filterList) => {
 let filterMap = { 
   or:  
     [ 
+      //{ SKU: { matchPhrase: search } },
       { SKU: { wildcard: `*${search}*` } },
       //{ parentSKU: { match: `${search}` } },  
       { mpn: { wildcard: `*${search}*` } },
       { titleStore: { wildcard: `*${search}*` } },
       { descriptionStore: { wildcard: `*${search}*` } },
+      //{ categoryID: { ne: `${categoryId}` } },
+      //{ subcategoryID: { ne: `${subCategoryId}` } },
+      //{ subcategory2ID: { ne: `${subCategory2Id}` } },
+      //{ handle: { wildcard: `*${search}*` }}
       /*{ brandID: { ne: `${brandId}` } },
       { manufacturerID: { ne: `${manufacturerId}` } },
       { categoryID: { ne: `${categoryId}` } },
@@ -1308,6 +1313,8 @@ let filterMap = {
 
 console.log("**** PARSE LIST ****", newList)
 filterMap = {...filterMap, and: newList }
+
+
 console.log("NEW LIST: ", newList)
 //filterMap = {and: newList }
 
