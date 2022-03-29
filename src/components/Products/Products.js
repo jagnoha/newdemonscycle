@@ -352,9 +352,9 @@ export default function Products() {
         
         let name = uuidv4()
         
-        //console.log("ESTE ES EL TIPO:", item)
+        console.log("ESTE ES EL TIPOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:", item)
         
-        if (!item.old){
+        if (item.data_url.includes('data')){
         const result = await Storage.put(item.file ? item.file.name : name, item.file, {
           level: "public",
           contentType: item.file.type,
@@ -1805,7 +1805,7 @@ console.log(allProducts)
       tempImages = JSON.parse(item.images)
       let tempBulletPoints = JSON.parse(item.bulletPoints)
 
-      //console.log("IMAGENES TEMPORALES ***********:  ",tempImages)
+      console.log("IMAGENES TEMPORALES **************************************************:  ",tempImages)
       
       setImages(tempImages)
       //key: item.id, text: item.name, value: item.id
@@ -2896,6 +2896,7 @@ const handleImages = (imageList, addUpdateIndex) => {
     //console.log("IMAGE LIST >>>>>>>>>>>>>", imageList, addUpdateIndex)
     //console.log("IMAGE LIST >>>",imageList)
     //console.log(addUpdateIndex)
+    console.log("IMAGEEEEEEEEEEEEEEEEEEE LIST", imageList)
     setImages(imageList)
 
 }
