@@ -555,7 +555,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>Height</label>
                           <input type='number' min="0" step="any" placeholder='Height in inches' 
-                            value = {props.height} 
+                            value = {props.height ? props.height : 0} 
                             onChange={props.handleHeight }/>
                         </Form.Field>
                         </Grid.Column>
@@ -563,7 +563,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>Length</label>
                           <input type='number' min="0" step="any" placeholder='Length in inches' 
-                            value = {props.length} 
+                            value = {props.length ? props.length : 0} 
                             onChange={props.handleLength }/>
                         </Form.Field>
                         </Grid.Column>
@@ -571,7 +571,7 @@ export default function CreateProductForm(props) {
                         <Form.Field>
                           <label>Width</label>
                           <input type='number' min="0" step="any" placeholder='Width in inches' 
-                            value = {props.width} 
+                            value = {props.width ? props.width : 0} 
                             onChange={props.handleWidth }/>
                         </Form.Field>
                         </Grid.Column>
@@ -590,7 +590,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>Weight</label>
                           <input type='number' min="0" step="any" placeholder='Weight in pounds' 
-                            value = {props.weight} 
+                            value = {props.weight ? props.weight : 0} 
                             onChange={props.handleWeight }/>
                         </Form.Field>
                         </Grid.Column>
@@ -598,7 +598,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>Dimensional Weight</label>
                           <input type='number' min="0" step="any" placeholder='Dimensional Weight' 
-                            value = {props.dimensionalWeight} 
+                            value = {props.dimensionalWeight ? props.dimensionalWeight : 0} 
                             onChange={props.handleDimensionalWeight }/>
                         </Form.Field>
                         </Grid.Column>
@@ -606,7 +606,7 @@ export default function CreateProductForm(props) {
                         <Form.Field>
                           <label>Applied Weight</label>
                           <input type='number' min="0" step="any" placeholder='Applied Weight' 
-                            value = {props.appliedWeight} 
+                            value = {props.appliedWeight ? props.appliedWeight : 0} 
                             onChange={props.handleAppliedWeight }/>
                         </Form.Field>
                         </Grid.Column>
@@ -619,7 +619,7 @@ export default function CreateProductForm(props) {
                     <Form.Field>
                           <label>Cost</label>
                           <input type='number' min="0" step="any" placeholder='Cost' 
-                            value = {props.cost} 
+                            value = {props.cost ? props.cost : 0} 
                             onChange={props.handleCost }/>
                         </Form.Field>
                       </Segment>
@@ -633,7 +633,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>MSRP</label>
                           <input type='number' min="0" step="any" placeholder='MSRP' 
-                            value = {props.priceMSRP} 
+                            value = {props.priceMSRP ? props.priceMSRP : 0} 
                             onChange={props.handlePriceMSRP }/>
                         </Form.Field>
                         </Grid.Column>
@@ -641,7 +641,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>MAP</label>
                           <input type='number' min="0" step="any" placeholder='MAP' 
-                            value = {props.priceMAP} 
+                            value = {props.priceMAP ? props.priceMAP : 0} 
                             onChange={props.handlePriceMAP }/>
                         </Form.Field>
                         </Grid.Column>
@@ -653,7 +653,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>Store</label>
                           <input type='number' min="0" step="any" placeholder='Store price' 
-                            value = {props.priceStore} 
+                            value = {props.priceStore ? props.priceStore : 0} 
                             onChange={props.handlePriceStore }/>
                         </Form.Field>
                         </Grid.Column>
@@ -661,7 +661,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>eBay</label>
                           <input type='number' min="0" step="any" placeholder='eBay Price' 
-                            value = {props.priceEbay} 
+                            value = {props.priceEbay ? props.priceEbay : 0} 
                             onChange={props.handlePriceEbay }/>
                         </Form.Field>
                         </Grid.Column>
@@ -669,7 +669,7 @@ export default function CreateProductForm(props) {
                         <Form.Field>
                           <label>Amazon</label>
                           <input type='number' min="0" step="any" placeholder='Amazon price' 
-                            value = {props.priceAmazon} 
+                            value = {props.priceAmazon ? props.priceAmazon : 0} 
                             onChange={props.handlePriceAmazon }/>
                         </Form.Field>
                         </Grid.Column>
@@ -681,7 +681,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>Wholesale Low</label>
                           <input type='number' min="0" step="any" placeholder='Wholesale Low Price' 
-                            value = {props.priceWholesaleLow} 
+                            value = {props.priceWholesaleLow ? props.priceWholesaleLow : 0} 
                             onChange={props.handlePriceWholesaleLow }/>
                         </Form.Field>
                         </Grid.Column>
@@ -689,7 +689,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>Wholesale High</label>
                           <input type='number' min="0" step="any" placeholder='Wholesale High Price' 
-                            value = {props.priceWholesaleHigh} 
+                            value = {props.priceWholesaleHigh ? props.priceWholesaleHigh : 0} 
                             onChange={props.handlePriceWholesaleHigh }/>
                         </Form.Field>
                         </Grid.Column>
@@ -701,7 +701,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>Scratch Low</label>
                           <input type='number' min="0" step="any" placeholder='Scratch Low Price' 
-                            value = {props.priceScratchLow} 
+                            value = {props.priceScratchLow ? props.priceScratchLow : 0} 
                             onChange={props.handlePriceScratchLow }/>
                         </Form.Field>
                         </Grid.Column>
@@ -709,7 +709,7 @@ export default function CreateProductForm(props) {
                           <Form.Field>
                           <label>Scratch High</label>
                           <input type='number' min="0" step="any" placeholder='Scratch High Price' 
-                            value = {props.priceScratchHigh} 
+                            value = {props.priceScratchHigh ? props.priceScratchHigh : 0} 
                             onChange={props.handlePriceScratchHigh }/>
                         </Form.Field>
                         </Grid.Column>
