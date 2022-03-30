@@ -39,11 +39,9 @@ export default function ExportFile(props) {
         { label: "SKU", key: "SKU" },
         { label: "MPN", key: "MPN" },
         { label: "Source", key: "Source" },
-        { label: "BinLocation", key: "BinLocation" },
         { label: "Brand", key: "Brand" },
-        { label: "PartsSKU", key: "PartsSKU" },
-        { label: "TuckerSKU", key: "TuckerSKU" },
-        { label: "WPSSKU", key: "WPSSKU" },
+        { label: "BinLocation", key: "BinLocation" },
+        { label: "ParentSKU", key: "ParentSKU" },        
         { label: "ItemName", key: "ItemName" },
         { label: "BodyDescription", key: "BodyDescription" },
         { label: "Handle", key: "Handle" },
@@ -56,7 +54,11 @@ export default function ExportFile(props) {
         { label: "Width", key: "Width" },
         { label: "ShopifyFitmentTags", key: "ShopifyFitmentTags" },
         { label: "ShopifyOnlyTags", key: "ShopifyOnlyTags" },
-        { label: "Image", key: "Image" },
+        { label: "Image1", key: "Image1" },
+        { label: "Image2", key: "Image2" },
+        { label: "Image3", key: "Image3" },
+        { label: "Image4", key: "Image4" },
+        { label: "Image5", key: "Image5" },
         { label: "ApparelGender", key: "ApparelGender" },
         { label: "ApparelMaterial", key: "ApparelMaterial" },        
         { label: "ApparelSize", key: "ApparelSize" },
@@ -118,10 +120,13 @@ export default function ExportFile(props) {
         { label: "OptionValue5", key: "OptionValue" },
         { label: "MSRP", key: "MSRP" },
         { label: "Cost", key: "Cost" },
-        { label: "ListPrice", key: "ListPrice" },
-        { label: "MyStorePrice", key: "MyStorePrice" },
-        { label: "SellPrice", key: "SellPrice" },
-        { label: "UpdateFlag", key: "UpdateFlag" },
+        //{ label: "ListPrice", key: "ListPrice" },
+        //{ label: "MyStorePrice", key: "MyStorePrice" },
+        //{ label: "SellPrice", key: "SellPrice" },
+        //{ label: "UpdateFlag", key: "UpdateFlag" },
+        { label: "ShopifyMetaTitle", key: "ShopifyMetaTitle" },
+        { label: "ShopifyMetaDescription", key: "ShopifyMetaDescription" },
+        { label: "MAP", key: "MAP" },
       ];    				
       
       
@@ -271,24 +276,35 @@ export default function ExportFile(props) {
                 let subCategoryName = subcategory ? subcategory.name : ""
                 let subcategory2 = props.subCategories2.find(itemSubCategory2 => itemSubCategory2.id === item.subcategory2ID)
                 let subCategory2Name = subcategory2 && subcategory2.id !== '3dc30aff-66a5-49fa-9f20-49c76031a994' ? subcategory2.name : ""
-                let height = item.dimensionHeight ? item.dimensionHeight : "" 
-                let length = item.dimensionLength ? item.dimensionLength : ""
-                let width = item.dimensionWidth ? item.dimensionWidth : ""
-                let image = JSON.parse(item.images).length > 0 ? JSON.parse(item.images)[0].data_url :  "" //item.images && item.images.image1 ? JSON.parse(item.images.image1).data_url : ""
-                let MSRP = item.priceMSRP ? item.priceMSRP : ""
-                let listPrice = ""
-                let myStore = item.priceStore ? item.priceStore : ""
+                let height = item.dimensionHeight || item.dimensionHeight > 0 ? item.dimensionHeight : "" 
+                let length = item.dimensionLength || item.dimensionLength > 0 ? item.dimensionLength : ""
+                let width = item.dimensionWidth || item.dimensionWidth > 0 ? item.dimensionWidth : ""
+                let Weight = item.appliedWeight || item.appliedWeight > 0 ? item.appliedWeight : ""
+                let image1 = JSON.parse(item.images).length > 0 ? JSON.parse(item.images)[0].data_url :  "" //item.images && item.images.image1 ? JSON.parse(item.images.image1).data_url : ""
+                let image2 = JSON.parse(item.images).length > 1 ? JSON.parse(item.images)[1].data_url :  "" //item.images && item.images.image1 ? JSON.parse(item.images.image1).data_url : ""
+                let image3 = JSON.parse(item.images).length > 2 ? JSON.parse(item.images)[2].data_url :  "" //item.images && item.images.image1 ? JSON.parse(item.images.image1).data_url : ""
+                let image4 = JSON.parse(item.images).length > 3 ? JSON.parse(item.images)[3].data_url :  "" //item.images && item.images.image1 ? JSON.parse(item.images.image1).data_url : ""
+                let image5 = JSON.parse(item.images).length > 4 ? JSON.parse(item.images)[4].data_url :  "" //item.images && item.images.image1 ? JSON.parse(item.images.image1).data_url : ""
+                  
+                let MSRP = item.priceMSRP || item.priceMSRP > 0 ? item.priceMSRP : ""
+                let MAP = item.priceMAP || item.priceMAP > 0 ? item.priceMAP : ""
+
+                //let listPrice = ""
+                //let myStore = item.priceStore ? item.priceStore : ""
                 let sourceWarehouse = item.sourceWarehouse ? item.sourceWarehouse : false
                 let sourceDropship = item.sourceDropship ? item.sourceDropship : false
                 let attributesParse = item.Attributes ? JSON.parse(item.Attributes) : []
                 
                 let product = { 
-                    SKU: item.SKU, MPN: item.mpn, BinLocation: item.parentSKU,
-                    Brand: brandName, PartsSKU: '', TuckerSKU: '', WPSSKU: '', ItemName: title,
+                    SKU: item.SKU, MPN: item.mpn, 
+                    BinLocation: item.binLocation,
+                    Brand: brandName, ParentSKU: item.parentSKU, ItemName: title,
                     BodyDescription: description, Handle: item.handle, Category: categoryName, SubCategory: subCategoryName,
-                    SubCategory2: subCategory2Name, Weight: item.appliedWeight, Height: height, Length: length, Width: width,
-                    ShopifyFitmentTags: item.shopifyFitmentTags, ShopifyOnlyTags: item.shopifyOnlyTags, Image: image, MSRP: MSRP, Cost: item.cost, ListPrice: listPrice,
-                    MyStorePrice: myStore, SellPrice: 0, UpdateFlag: 0
+                    SubCategory2: subCategory2Name, Weight: Weight, Height: height, Length: length, Width: width,
+                    ShopifyFitmentTags: item.shopifyFitmentTags, ShopifyOnlyTags: item.shopifyOnlyTags, MSRP: MSRP, Cost: item.cost, 
+                    ShopifyMetaTitle: item.shopifyMetaTitle, ShopifyMetaDescription: item.shopifyMetaDescription,
+                    MAP: MAP, Image1: image1, Image2: image2, Image3: image3, Image4: image4, Image5: image5,
+                     
                 }
 
                 let n = 0
