@@ -86,6 +86,7 @@ type Product @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn"
   appliedWeight: Float @default(value: "0")
   status: String @default(value: "Draft")
   updateFlag: Boolean @default(value: "false")
+  newFlag: Boolean @default(value: "false")
   binLocation: String
   titleStore: String
   titleEbay: String
