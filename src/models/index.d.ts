@@ -96,6 +96,7 @@ export declare class Category {
   readonly id: string;
   readonly name?: string | null;
   readonly type?: string | null;
+  readonly ebayCode?: string | null;
   readonly deleted?: boolean | null;
   readonly createdOn: string;
   readonly updatedOn: string;

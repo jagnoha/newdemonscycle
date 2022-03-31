@@ -283,6 +283,7 @@ export const createCategory = /* GraphQL */ `
       id
       name
       type
+      ebayCode
       deleted
       createdOn
       updatedOn
@@ -301,6 +302,7 @@ export const updateCategory = /* GraphQL */ `
       id
       name
       type
+      ebayCode
       deleted
       createdOn
       updatedOn
@@ -319,6 +321,7 @@ export const deleteCategory = /* GraphQL */ `
       id
       name
       type
+      ebayCode
       deleted
       createdOn
       updatedOn

@@ -349,6 +349,7 @@ export const getCategory = /* GraphQL */ `
       id
       name
       type
+      ebayCode
       deleted
       createdOn
       updatedOn
@@ -369,6 +370,7 @@ export const listCategories = /* GraphQL */ `
         id
         name
         type
+        ebayCode
         deleted
         createdOn
         updatedOn
@@ -398,6 +400,7 @@ export const syncCategories = /* GraphQL */ `
         id
         name
         type
+        ebayCode
         deleted
         createdOn
         updatedOn

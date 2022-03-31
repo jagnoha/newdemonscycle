@@ -411,6 +411,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "ebayCode": {
+                    "name": "ebayCode",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "deleted": {
                     "name": "deleted",
                     "isArray": false,
@@ -948,5 +955,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "e69cf407fe30bb4f7403f84922bc8e96"
+    "version": "b8f09770059c3d7d6268a056055f6ad5"
 };
