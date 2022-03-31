@@ -244,6 +244,7 @@ export default function ExportFile(props) {
                   subcategoryID
                   weight
                   updateFlag
+                  newFlag
                   status        
                 }
               }
@@ -316,8 +317,7 @@ export default function ExportFile(props) {
                     SubCategory2: subCategory2Name, Weight: Weight, Height: height, Length: length, Width: width,
                     ShopifyFitmentTags: item.shopifyFitmentTags, ShopifyOnlyTags: item.shopifyOnlyTags, MSRP: MSRP, Cost: item.cost, 
                     ShopifyMetaTitle: item.shopifyMetaTitle, ShopifyMetaDescription: item.shopifyMetaDescription,
-                    MAP: MAP, Image1: image1, Image2: image2, Image3: image3, Image4: image4, Image5: image5,
-                     
+                    MAP: MAP, Image1: image1, Image2: image2, Image3: image3, Image4: image4, Image5: image5,                     
                 }
 
                 let n = 0
@@ -380,6 +380,7 @@ export default function ExportFile(props) {
         let productDetails = {
                       id: item.id,
                       updateFlag: false,
+                      newFlag: false,
                       _version: item._version,          
                     }
                     await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))

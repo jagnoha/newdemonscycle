@@ -287,6 +287,7 @@ export default function Products() {
           sourceDropship: productForm.sourceDropship,
           Attributes: productForm.Attributes,
           updateFlag: true,
+          newFlag: true,
           status: productForm.status ? productForm.status : 'Draft',          
         }
         let productInfo = await API.graphql(graphqlOperation(createProduct, { input: productInput }))

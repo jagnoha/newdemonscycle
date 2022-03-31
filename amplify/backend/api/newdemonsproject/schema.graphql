@@ -48,6 +48,7 @@ type Category @model(timestamps: { createdAt: "createdOn", updatedAt: "updatedOn
   id: ID!
   name: String
   type: String @default(value: "Category")
+  ebayCode: String
   deleted: Boolean @default(value: "false")
   createdOn: AWSDateTime!
   updatedOn: AWSDateTime!
