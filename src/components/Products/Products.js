@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Amplify, { API, graphqlOperation, Storage } from 'aws-amplify'
-import { Pagination, Input, Button, Icon, Grid, Modal, Dropdown, Form, Popup, Label} from 'semantic-ui-react'
+import { Pagination, Input, Button, Icon, Grid, Modal, Dropdown, Form, Popup, Loader, Label} from 'semantic-ui-react'
 import { SemanticToastContainer, toast } from 'react-semantic-toasts'
 import 'react-semantic-toasts/styles/react-semantic-alert.css'
 import { listProducts, syncProducts, searchProducts, listBrands, listManufacturers, listCategories, listSubCategories, productByTypeAndCreatedOn, 
@@ -40,6 +40,10 @@ export default function Products() {
   const [tokenRight, setTokenRight] = useState("")
   const [nextTokenProduct, setNextTokenProduct] = useState("")
   const [tokenProductsList, setTokenProductsList] = useState([])
+  const [processingProduct, setProcessingProduct] = useState(false)
+
+
+      
 
   //const [productsLessFields, setProductsLessFields] = useState([])
 
@@ -543,8 +547,17 @@ export default function Products() {
           updateFlag: true,
           _version: version,          
         }
+
+        
+
         let productEdited = await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))
         console.log(productEdited)
+       
+          
+
+          setOpenEdit(false)
+      
+      
         /*console.log("PRODUCTS LIST: ", products.map(item => 
             {
               if (item.id === id) {
@@ -575,6 +588,7 @@ export default function Products() {
         setAttributesSelected([])
         setStatusProduct('Active')
         
+        
         setTimeout(() => {
           toast({
               type: 'success',
@@ -583,6 +597,7 @@ export default function Products() {
               description: 'Product successfully updated',
               time: 2000,              
           })
+          setProcessingProduct(false)
           setOpenEdit(false)
       
       }, 200)
@@ -744,6 +759,8 @@ async function serialFlow(){
   //const handleUpdate = (evt) => {
     async function handleUpdate(evt){
     evt.preventDefault()
+
+    setProcessingProduct(true)    
 
     let imageList = serialFlow().then(value => { 
       
@@ -3708,6 +3725,7 @@ const handleChangeProductsByPage = (e, {value}) => {
             
             
             </div>
+            
             
 
       </div>  

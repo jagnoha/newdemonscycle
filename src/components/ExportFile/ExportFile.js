@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Amplify, { API, graphqlOperation, Storage } from 'aws-amplify'
 import { SemanticToastContainer, toast } from 'react-semantic-toasts'
-import { Pagination, Input, Segment, Button, Icon, Grid, Modal, Header, Form, ItemContent, Item} from 'semantic-ui-react'
+import { Pagination, Input, Segment, Button, Icon, Grid, Modal, Header, Form, ItemContent, Item, Loader, Step, Label, Menu, Confirm} from 'semantic-ui-react'
 import { listProducts, productByTypeAndCreatedOn, listBrands, syncProducts, listCategories, listSubCategories, listSubCategory2s, listEbayStoreCategories, listAttributes, getProduct } from '../../graphql/queries'
 import aws_exports from '../../aws-exports'
 import { CSVLink } from 'react-csv'
@@ -28,13 +28,24 @@ export default function ExportFile(props) {
 
     const [products, setProducts] = useState([])
     const [JsonData,setJsonData]=useState("")
+    const [open, setOpen]=useState(false)
     //const [brands, setBrands] = useState([])
     //const [categories, setCategories] = useState([])
     //const [attributes, setAttributes] = useState([])
     //const [subCategories, setSubCategories] = useState([])
     //const [subCategories2, setSubCategories2] = useState([])    
     const [data, setData] = useState([])
+    const [dataMetafields, setDataMetafields] = useState([])
     
+
+    let headersMetaFields = [
+      { label: "productHandle", key: "productHandle" },
+      { label: "key", key: "key" },
+      { label: "namespace", key: "namespace" },
+      { label: "type", key: "type" },
+      { label: "value", key: "value" },
+    ]
+
     let headers = [
         { label: "SKU", key: "SKU" },
         { label: "MPN", key: "MPN" },
@@ -262,6 +273,8 @@ export default function ExportFile(props) {
             
             
             let result = [];
+
+            let resultMetaFields = [];
             
 
             for (let item of products){
@@ -340,14 +353,22 @@ export default function ExportFile(props) {
                 if (sourceDropship) {
                     //product.Source = 'DROPSHIP'
                     result.push({...product, Source: 'DROPSHIP'})
-                }                
+                }
                 
+                if (item.shopifyMetaTitle && item.shopifyMetaTitle.length > 0 ) {
+                  resultMetaFields.push({productHandle: item.handle, key: 'title_tag', namespace: 'global', type: 'single_line_text_field', value: item.shopifyMetaTitle})
+                }
+                if (item.shopifyMetaDescription && item.shopifyMetaDescription.length > 0 ) {
+                  resultMetaFields.push({productHandle: item.handle, key: 'description_tag', namespace: 'global', type: 'multi_line_text_field', value: item.shopifyMetaDescription})
+                }
 
                 //result.push(product)
             
             }
             
             setData(result)
+            setDataMetafields(resultMetaFields)
+            
       
         } catch (err) { console.log(err) }
     }
@@ -364,6 +385,7 @@ export default function ExportFile(props) {
                     await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))
       }
       setProducts([])
+      setOpen(false)
     }
 
     /*const fetchBrands = async () => {
@@ -969,7 +991,7 @@ const updateHandlebar = async (item) => {
 
       
 
-      for (let item of excelFile.slice(3300,3360)){
+      for (let item of excelFile.slice(30100,30324)){
         console.log(" **************** ",n++," *************")
         //console.log(item.SKU)
         console.log(" ***********************************")
@@ -1028,62 +1050,104 @@ const updateHandlebar = async (item) => {
   }
       
       
-
+  
     return (
+
+      <div>  
+
+       
+        
         <div style={divStyle}>
         <SemanticToastContainer position="top-center" />
-        <h1>Export File</h1>
+        <h1>Export Files</h1>
         
-        { products && products.length > 0 ?
-        <CSVLink
-            enclosingCharacter={`'`} 
-            data={data} 
-            headers={headers}
-            filename={"flxpoint_export_file.csv"}
-            className="btn btn-primary"
-            target="_blank"
-            onClick={() => handleUpdateFlag()}
-            >
-            <Icon name='download' size='huge' />
-            Create export file from updated products - FlxPoint
-            
-        </CSVLink> :
-        <p>No updated or new products</p>
-        }
-        
-        {/*<hr></hr>
-        <label htmlFor="upload">Upload to AWS</label><br></br>
-          <input
-              type="file"
-              name="upload"
-              id="upload"
-              onChange={readUploadFile}
-        />*/}
-        <hr></hr>
-        {/*<label htmlFor="upload">Upload New Products</label><br></br>
-          <input
-              type="file"
-              name="upload"
-              id="upload"
-              onChange={readUploadNewProducts}
-          />          
-      */}
-        {/*<hr></hr>
-          <label htmlFor="upload">Update products</label><br></br>
-          <button
-              onClick={handleUpdateFields}
-          >Update Products</button>
-        
-        */}
-        <br />
-        <label htmlFor="upload">Upload brands</label><br></br>
-          <input
-              type="file"
-              name="upload"
-              id="upload"
-              onChange={readUploadUpdateProducts}
-      />
+        <div><Menu compact>
+          <Menu.Item as='a'>
+            <Icon name='tag' /> Modified products
+              {products && products.length > 0 ? 
+              <Label color='teal' floating>
+                {products.length}
+              </Label>
+              : ""
+              }
+          
+          </Menu.Item>
+          <Menu.Item as='a' onClick={() => setOpen(true)}>
+            <Icon name='erase' color="red" />Reset
+          </Menu.Item>  
+        </Menu></div>
+        <Confirm
+          open={open}
+          header='Warning! - Clean registry of modified products'
+          content='If you have already downloaded the latest product change files, you can clean the registry and start with a new list'
+          onCancel={()=>setOpen(false)}
+          onConfirm={() => handleUpdateFlag()}
+        />
+
+        <Step.Group>
+          <Step disabled={!(products && products.length > 0)}>
+            <Icon name='download' />
+            <Step.Content>
+                <Step.Title>Flxpoint</Step.Title>
+              <Step.Description>
+                <CSVLink
+                      enclosingCharacter={`'`} 
+                      data={data} 
+                      headers={headers}
+                      filename={"flxpoint_export_file.csv"}
+                      className="btn btn-primary"
+                      target="_blank"
+                      //onClick={() => handleUpdateFlag()}
+                      >
+                      Download CSV File to update Feed in FlxPoint
+                  </CSVLink>
+              </Step.Description>
+            </Step.Content>
+          </Step>
+          <Step disabled={!(products && products.length > 0)}>
+            <Icon name='download' />
+            <Step.Content>
+              <Step.Title>Shopify Metafields</Step.Title>
+              <Step.Description>
+                <CSVLink
+                      enclosingCharacter={`'`} 
+                      data={dataMetafields} 
+                      headers={headersMetaFields}
+                      filename={"shopify_metafields_export_file.csv"}
+                      className="btn btn-primary"
+                      target="_blank"
+                      //onClick={() => handleUpdateFlag()}
+                      >
+                      Download CSV File to update Metafields in Shopify
+                  </CSVLink>
+              </Step.Description>
+            </Step.Content>
+          </Step>
+          <Step disabled={!(products && products.length > 0)}>
+            <Icon name='download' />
+            <Step.Content>
+              <Step.Title>eBay File Exchange</Step.Title>
+              <Step.Description>
+              <CSVLink
+                      enclosingCharacter={`'`} 
+                      data={data} 
+                      headers={headers}
+                      filename={"flxpoint_export_file.csv"}
+                      className="btn btn-primary"
+                      target="_blank"
+                      //onClick={() => handleUpdateFlag()}
+                      >
+                      Download CSV File to Update listings on Ebay using File Exhange
+                  </CSVLink>                
+                </Step.Description>
+            </Step.Content>
+          </Step>
+        </Step.Group>
+       
       </div>    
+
+      </div>
+    
     );
     
   }
