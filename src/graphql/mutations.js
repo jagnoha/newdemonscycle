@@ -411,6 +411,7 @@ export const createProduct = /* GraphQL */ `
       appliedWeight
       status
       updateFlag
+      newFlag
       binLocation
       titleStore
       titleEbay
@@ -473,6 +474,7 @@ export const updateProduct = /* GraphQL */ `
       appliedWeight
       status
       updateFlag
+      newFlag
       binLocation
       titleStore
       titleEbay
@@ -535,6 +537,7 @@ export const deleteProduct = /* GraphQL */ `
       appliedWeight
       status
       updateFlag
+      newFlag
       binLocation
       titleStore
       titleEbay

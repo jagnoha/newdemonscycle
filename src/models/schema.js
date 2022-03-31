@@ -703,6 +703,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "newFlag": {
+                    "name": "newFlag",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "binLocation": {
                     "name": "binLocation",
                     "isArray": false,
@@ -941,5 +948,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "fef27cd1b8033183f5c4a64a5d9e0560"
+    "version": "e69cf407fe30bb4f7403f84922bc8e96"
 };

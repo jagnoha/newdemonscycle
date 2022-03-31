@@ -138,6 +138,7 @@ export declare class Product {
   readonly appliedWeight?: number | null;
   readonly status?: string | null;
   readonly updateFlag?: boolean | null;
+  readonly newFlag?: boolean | null;
   readonly binLocation?: string | null;
   readonly titleStore?: string | null;
   readonly titleEbay?: string | null;

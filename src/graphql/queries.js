@@ -503,6 +503,7 @@ export const getProduct = /* GraphQL */ `
       appliedWeight
       status
       updateFlag
+      newFlag
       binLocation
       titleStore
       titleEbay
@@ -567,6 +568,7 @@ export const listProducts = /* GraphQL */ `
         appliedWeight
         status
         updateFlag
+        newFlag
         binLocation
         titleStore
         titleEbay
@@ -640,6 +642,7 @@ export const syncProducts = /* GraphQL */ `
         appliedWeight
         status
         updateFlag
+        newFlag
         binLocation
         titleStore
         titleEbay
@@ -717,6 +720,7 @@ export const productByTypeAndUpdatedOn = /* GraphQL */ `
         appliedWeight
         status
         updateFlag
+        newFlag
         binLocation
         titleStore
         titleEbay
@@ -794,6 +798,7 @@ export const productByTypeAndCreatedOn = /* GraphQL */ `
         appliedWeight
         status
         updateFlag
+        newFlag
         binLocation
         titleStore
         titleEbay
@@ -871,6 +876,7 @@ export const productByTypeAndPrice = /* GraphQL */ `
         appliedWeight
         status
         updateFlag
+        newFlag
         binLocation
         titleStore
         titleEbay
@@ -948,6 +954,7 @@ export const productByTypeAndCost = /* GraphQL */ `
         appliedWeight
         status
         updateFlag
+        newFlag
         binLocation
         titleStore
         titleEbay
@@ -1025,6 +1032,7 @@ export const productByTypeAndSKU = /* GraphQL */ `
         appliedWeight
         status
         updateFlag
+        newFlag
         binLocation
         titleStore
         titleEbay
@@ -1102,6 +1110,7 @@ export const productByTypeAndMPN = /* GraphQL */ `
         appliedWeight
         status
         updateFlag
+        newFlag
         binLocation
         titleStore
         titleEbay
@@ -1179,6 +1188,7 @@ export const searchProducts = /* GraphQL */ `
         appliedWeight
         status
         updateFlag
+        newFlag
         binLocation
         titleStore
         titleEbay
