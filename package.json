@@ -5,6 +5,8 @@
   "dependencies": {
     "@aws-amplify/ui-react": "^1.2.26",
     "aws-amplify": "^4.3.12",
+    "axios": "^0.26.1",
+    "crypto": "^1.0.1",
     "draft-js": "^0.11.7",
     "excel-to-json-in-react-js": "^1.0.2",
     "javascript-time-ago": "^2.3.13",

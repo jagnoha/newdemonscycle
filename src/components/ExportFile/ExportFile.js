@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Amplify, { API, graphqlOperation, Storage } from 'aws-amplify'
 import { SemanticToastContainer, toast } from 'react-semantic-toasts'
 import { Pagination, Input, Segment, Button, Icon, Grid, Modal, Header, Form, ItemContent, Item, Loader, Step, Label, Menu, Confirm} from 'semantic-ui-react'
-import { listProducts, productByTypeAndCreatedOn, listBrands, syncProducts, listCategories, listSubCategories, listSubCategory2s, listEbayStoreCategories, listAttributes, getProduct } from '../../graphql/queries'
+import { listProducts, productByTypeAndCreatedOn, searchProducts, listBrands, syncProducts, listCategories, listSubCategories, listSubCategory2s, listEbayStoreCategories, listAttributes, getProduct } from '../../graphql/queries'
 import aws_exports from '../../aws-exports'
 import { CSVLink } from 'react-csv'
 import { attachEventProps } from '@aws-amplify/ui-react/lib-esm/react-component-lib/utils'
@@ -14,6 +14,9 @@ import { createCategory, createSubCategory, createManufacturer, createProduct, u
 import { DataStore, Predicates, SortDirection } from 'aws-amplify'
 import { Product } from '../../models'
 import { ConsoleLogger } from '@aws-amplify/core'
+import axios from 'axios'
+import crypto from 'crypto'
+
 //import Attributes from '../Attributes/Attributes'
 
 Amplify.configure(aws_exports)
@@ -26,6 +29,8 @@ Amplify.configure(aws_exports)
 
 export default function ExportFile(props) {
 
+    const urlBase = 'https://demons-cycle-storage202642-devt.s3.amazonaws.com/public/'
+
     const [products, setProducts] = useState([])
     const [JsonData,setJsonData]=useState("")
     const [open, setOpen]=useState(false)
@@ -36,6 +41,7 @@ export default function ExportFile(props) {
     //const [subCategories2, setSubCategories2] = useState([])    
     const [data, setData] = useState([])
     const [dataMetafields, setDataMetafields] = useState([])
+    const [dataReviseEbay, setDataReviseEbay] = useState([])
     
 
     let headersMetaFields = [
@@ -45,6 +51,18 @@ export default function ExportFile(props) {
       { label: "type", key: "type" },
       { label: "value", key: "value" },
     ]
+
+    let headersReviseEbay = [
+      { label: "*Action(SiteID=eBayMotors|Country=US|Currency=USD|Version=941)", key: "Action" },
+      { label: "ItemID", key: "ItemID" },
+      { label: "Category", key: "Category" },
+      { label: "Title", key: "Title" },
+      { label: "Description", key: "Description" },
+      { label: "PicURL", key: "PicURL" },
+      { label: "Product:Brand", key: "Brand" },
+      { label: "Product:MPN", key: "MPN" },      
+    ]    
+
 
     let headers = [
         { label: "SKU", key: "SKU" },
@@ -216,6 +234,7 @@ export default function ExportFile(props) {
                   SKU
                   id
                   titleStore
+                  titleEbay
                   _deleted
                   Attributes
                   brandID
@@ -276,13 +295,15 @@ export default function ExportFile(props) {
             let result = [];
 
             let resultMetaFields = [];
+
+            let resultReviseEbay = [];
             
 
             for (let item of products){
                 
                 let brand = props.brands.find(itemBrand => itemBrand.id === item.brandID) 
                 let brandName = brand ? brand.name : ""
-                let title = item.titleStore ? item.titleStore : ""
+                let title = item.titleStore ? item.titleStore : ""                
                 let description = item.descriptionStore ? item.descriptionStore : ""
                 let category = props.categories.find(itemCategory => itemCategory.id === item.categoryID)
                 let categoryName = category ? category.name : ""
@@ -362,12 +383,18 @@ export default function ExportFile(props) {
                   resultMetaFields.push({productHandle: item.handle, key: 'description_tag', namespace: 'global', type: 'multi_line_text_field', value: item.shopifyMetaDescription})
                 }
 
+                if (!item.newFlag){
+                  resultReviseEbay.push({Action: "Revise", ItemID: item.SKU, Category: category.ebayCode, Title: item.titleEbay, Description: description, PicURL: image1,
+                  Brand: brandName, MPN: item.mpn })
+                }
+
                 //result.push(product)
             
             }
             
             setData(result)
             setDataMetafields(resultMetaFields)
+            setDataReviseEbay(resultReviseEbay)
             
       
         } catch (err) { console.log(err) }
@@ -424,7 +451,9 @@ export default function ExportFile(props) {
           
       
         } catch (err) { console.log(err) }
-      }
+      }*/
+
+      /*
 
       const fetchSubCategories = async () => {
         try {
@@ -842,7 +871,7 @@ export default function ExportFile(props) {
     }
   }
 
-  const readUploadUpdateProducts = (e) => {
+  const readUploadUpdate = (e) => {
     e.preventDefault();
     if (e.target.files) {
         const reader = new FileReader();
@@ -946,6 +975,168 @@ const updateHandlebar = async (item) => {
   } catch (error) {
     console.log(error)
   }
+}
+
+const readUploadUpdateImages = (e) => {
+  e.preventDefault();
+  if (e.target.files) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+          const data = e.target.result;
+          const workbook = xlsx.read(data, { type: "array" });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const json = xlsx.utils.sheet_to_json(worksheet);
+          //console.log(json);
+          handleUpdateImages(json)
+      };
+      reader.readAsArrayBuffer(e.target.files[0]);
+  }
+}
+
+const updateImages = async (itemList) => {
+  try {
+    let tempList = []
+    for (const item of itemList) {
+        
+      
+
+      console.log("ESTE ES EL TIPOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:", item.SKU)
+
+      if (item.image) {
+        let name = item.image.split('/')[item.image.split('/').length-1].split('?')[0]
+        const res = await axios.get(item.image, {responseType: 'arraybuffer'})
+        let type = res.headers['content-type']
+          let file = res.data          
+          const result = await Storage.put(name, file, {
+            level: "public",
+            contentType: type,
+          })
+          //let type = 'image/jpeg'
+          tempList.push({data_url: urlBase + name, file: {type: type, name: name}})
+      
+      }
+      if (item.variant_image && item.variant_image !== item.image) {
+        let name = item.variant_image.split('/')[item.variant_image.split('/').length-1].split('?')[0]
+        const res = await axios.get(item.variant_image, {responseType: 'arraybuffer'})
+        let type = res.headers['content-type']
+          let file = res.data          
+          const result = await Storage.put(name, file, {
+            level: "public",
+            contentType: type,
+          })
+          //let type = 'image/jpeg'
+          tempList.push({data_url: urlBase + name, file: {type: type, name: name}})        
+      }
+      
+    }
+
+    //images: JSON.stringify(imageList),
+    
+    let product = await API.graphql(
+      graphqlOperation(searchProducts, {
+        
+        filter: {SKU: { eq: itemList[0].SKU }},
+        
+    }))
+
+    let id = product.data.searchProducts.items[0].id
+    let version = product.data.searchProducts.items[0]._version       
+    
+    const productDetails = {
+      id: id,
+      images: JSON.stringify(tempList),
+      _version: version
+    };
+    await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))
+    
+    //console.log(JSON.stringify(tempList))
+
+
+      //console.log("=================", itemDetails, "========================")
+      //let result = await API.graphql(graphqlOperation(createProduct, { input: itemDetails }))
+      //console.log(result)
+      /*for (let item of itemList) {
+        console.log(item.SKU)
+        console.log(item.variant_image)
+        console.log(item.image)
+      }*/
+      //console.log(tempList)  
+      //console.log(item)
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+
+const handleUpdateImages = async (excelFile) => {
+  /*let url = 'https://cdn.shopify.com/s/files/1/0338/9682/4876/products/28891013_600x.jpg'
+  const res = await axios.get(url, {responseType: 'arraybuffer'})
+  
+  let type = res.headers['content-type']
+  let file = res.data
+  console.log(file)
+  const result = await Storage.put('testbueno8.jpg', file, {
+    level: "public",
+    contentType: type,
+  })*/
+  try {
+
+    let n = 1
+    let oldSKU = ""
+    
+    let itemList = []    
+
+      for (let item of excelFile.slice(50556,50823)){
+        console.log(" **************** ",n++," *************")
+        //console.log(item)
+        console.log("***************************************")       
+        if (item.SKU){
+          itemList = []
+          //console.log("** NO VACIO **")
+          oldSKU = item.SKU
+          itemList.push(item)
+        } else {
+          //console.log("******* VACIO ******")
+          itemList.push({SKU: oldSKU, variant_image: item.variant_image, image: item.image })
+        }
+
+        if (oldSKU === item.SKU){
+          //console.log(itemList)
+          await updateImages(itemList)
+
+        }
+        /*console.log("ITEM.SKU: ", item.SKU) 
+        console.log("OLDITEM.SKU: ", oldItem.SKU)
+       
+
+        if (item.SKU && item.SKU !== oldItem.SKU){
+          await updateImages(itemList)
+          itemList = []
+        }   
+
+      
+        
+        if (item.SKU){
+          oldItem = {...item}
+          itemList.push(item)
+        } else {
+          itemList.push(oldItem)
+        }*/
+
+         
+
+        
+        /*console.log("item.SKU: ", item.SKU)
+        console.log("oldItem.SKU: ", oldItem.SKU)*/
+            
+
+      }
+
+    } catch(error) {
+      console.log(error)
+    }
+
 }
 
   const handleUpdateFieldsFromExcel = async (excelFile) => {
@@ -1092,6 +1283,7 @@ const updateHandlebar = async (item) => {
                 <Step.Title>Flxpoint</Step.Title>
               <Step.Description>
                 <CSVLink
+                      separator={";"}
                       enclosingCharacter={`'`} 
                       data={data} 
                       headers={headers}
@@ -1111,6 +1303,7 @@ const updateHandlebar = async (item) => {
               <Step.Title>Shopify Metafields</Step.Title>
               <Step.Description>
                 <CSVLink
+                      separator={";"}
                       enclosingCharacter={`'`} 
                       data={dataMetafields} 
                       headers={headersMetaFields}
@@ -1130,10 +1323,11 @@ const updateHandlebar = async (item) => {
               <Step.Title>eBay File Exchange</Step.Title>
               <Step.Description>
               <CSVLink
+                      separator={";"}
                       enclosingCharacter={`'`} 
-                      data={data} 
-                      headers={headers}
-                      filename={"flxpoint_export_file.csv"}
+                      data={dataReviseEbay} 
+                      headers={headersReviseEbay}
+                      filename={"ebay_FileExchange_revise_file.csv"}
                       className="btn btn-primary"
                       target="_blank"
                       //onClick={() => handleUpdateFlag()}
@@ -1146,6 +1340,15 @@ const updateHandlebar = async (item) => {
         </Step.Group>
        
       </div>    
+      {/*<Button onClick={()=>handleUpdateImages()}>Upload Images</Button>*/}
+
+      {/*<label htmlFor="upload">Update images</label><br></br>
+          <input
+              type="file"
+              name="upload"
+              id="upload"
+              onChange={readUploadUpdateImages}
+            />*/}
 
       </div>
     

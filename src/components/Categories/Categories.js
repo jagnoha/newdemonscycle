@@ -92,6 +92,7 @@ export default function Categories() {
         const categoryDetails = {
           id: id,
           name: categoryEdit.name,
+          ebayCode: categoryEdit.ebayCode,
           _version: version
         };
         await API.graphql(graphqlOperation(updateCategory, { input: categoryDetails }))
@@ -300,7 +301,7 @@ const fetchCategorys = async () => {
 
     const handleOpenEditForm = (item) => {
       setOpenEdit(!openEdit) 
-      setCategoryEdit({id: item.id, name: item.name})
+      setCategoryEdit({id: item.id, name: item.name, ebayCode: item.ebayCode})
            
     }
 
@@ -318,8 +319,9 @@ const fetchCategorys = async () => {
         setChunkCategorys( sliceIntoChunks(tempCategorys, 10 ))
       }
     }
-    console.log(categoryEdit.name)
-    console.log(categoryEdit.id)
+    console.log("Name: ", categoryEdit.name)
+    console.log("ebayCode: ", categoryEdit.ebayCode)
+    console.log("id: ", categoryEdit.id)
 
     return (
       
@@ -391,8 +393,14 @@ const fetchCategorys = async () => {
                       <label>Category Name</label>
                       <input placeholder='Category Name' 
                       value = {categoryEdit.name} 
-                      onChange={e => setCategoryEdit({id: categoryEdit.id, name: e.target.value})}/>
-                    </Form.Field>                    
+                      onChange={e => setCategoryEdit({id: categoryEdit.id, name: e.target.value, ebayCode: categoryEdit.ebayCode})}/>
+                    </Form.Field>
+                    <Form.Field>
+                      <label>eBay Category code</label>
+                      <input placeholder='eBay Category code' 
+                      value = {categoryEdit.ebayCode} 
+                      onChange={e => setCategoryEdit({id: categoryEdit.id, name: categoryEdit.name, ebayCode: e.target.value})}/>
+                    </Form.Field>                     
                   </Form>
                 </Modal.Description>
               </Modal.Content>

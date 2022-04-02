@@ -1396,6 +1396,7 @@ if ((tokenList.length === (pageNumber + incr)) && incr >= 0){
     let productData = allProducts.data
     let productListResult = productData[ `${functionList[functionN].name}` ]
     console.log( productListResult )
+    console.log("TOTAL PRODUCTS ************* : ", productListResult.total)
 
       /*setTokenList([...tokenList, allProducts.data.listProducts.nextToken])
       setTokenProductsList([...tokenProductsList, allProducts.data.listProducts.items ])
@@ -1514,7 +1515,7 @@ const fetchProducts = async () => {
     const handlePaginationChange = (e, { activePage }) => { console.log("ORDER COLUMN:", orderColumn);setActivePage(activePage); setProductsSelected([]); setProductsSelectedAll(false); };
     
     
-    const sortItems = async(listProducts, direction, column) => {
+  const sortItems = async(listProducts, direction, column) => {
       console.log(listProducts)
       console.log("DIRECTION: ", direction)
       console.log("COLUMN: ", column)
@@ -1600,7 +1601,8 @@ functionN = 7
     console.log(allProducts)
     let productData = allProducts.data
     let productListResult = productData[ `${functionList[functionN].name}` ]
-    console.log( productListResult )
+    //console.log( "TTTTTTTTTTTTTTTTOOOOOOOOOOOOOOOOOTAL ", productListResult )
+    console.log("TOTAL PRODUCTS ************* : ", productListResult.total)
 
       //setTokenList([...tokenList, productListResult.nextToken])
       setTokenList([ productListResult.nextToken ])
