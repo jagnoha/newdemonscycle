@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Amplify, { API, graphqlOperation, Storage } from 'aws-amplify'
-import { Pagination, Input, Button, Icon, Grid, Modal, Dropdown, Form, Popup, Loader, Label} from 'semantic-ui-react'
+import { Pagination, Input, Button, Icon, Grid, Modal, Dropdown, Form, Popup, Loader, Label, Message} from 'semantic-ui-react'
 import { SemanticToastContainer, toast } from 'react-semantic-toasts'
 import 'react-semantic-toasts/styles/react-semantic-alert.css'
 import { listProducts, syncProducts, searchProducts, listBrands, listManufacturers, listCategories, listSubCategories, productByTypeAndCreatedOn, 
@@ -3587,7 +3587,7 @@ const handleChangeProductsByPage = (e, {value}) => {
               </Modal.Actions>
             </Modal>
 
-
+            {!processingProduct ?
             <Modal
             closeOnEscape={true}
             closeOnDimmerClick={false} 
@@ -3684,13 +3684,15 @@ const handleChangeProductsByPage = (e, {value}) => {
               </Button>
  
               </Modal.Actions>
-            </Modal>
+            </Modal> : <div></div>
+                }
             
           </Grid.Column> 
            
         </Grid>
 
         {/*console.log(brands)*/}
+        {!processingProduct ?
         <ProductTable 
               //data = {dataChunks[activePage - 1]}
               data = {products} /*? products.filter(item => item.options !== '0') : products}*/
@@ -3707,6 +3709,18 @@ const handleChangeProductsByPage = (e, {value}) => {
               handleSelectAllProductsInPage = {(e, data) => handleSelectAllProductsInPage (e, data)}
               productsSelectedAll = {productsSelectedAll}
               openForm = {handleOpenEditForm} />
+                :
+              /*<Message floating icon>
+                <Icon name='circle notched' loading />
+                <Message.Content>
+                  <Message.Header>Just one second</Message.Header>
+                  We are fetching that content for you.
+                </Message.Content>
+        </Message>*/
+        <Loader active style = {{top:350}} />
+
+        }
+
          <div style = {paginationStyle}>
           
           

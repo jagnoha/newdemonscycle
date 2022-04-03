@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Amplify, { API, graphqlOperation, Storage } from 'aws-amplify'
 import { SemanticToastContainer, toast } from 'react-semantic-toasts'
-import { Pagination, Input, Segment, Button, Icon, Grid, Modal, Header, Form, ItemContent, Item, Loader, Step, Label, Menu, Confirm} from 'semantic-ui-react'
+import { Pagination, Input, Segment, Button, Icon, Grid, Modal, Header, Form, ItemContent, Item, Loader, Step, Label, Menu, Confirm, Container} from 'semantic-ui-react'
 import { listProducts, productByTypeAndCreatedOn, searchProducts, listBrands, syncProducts, listCategories, listSubCategories, listSubCategory2s, listEbayStoreCategories, listAttributes, getProduct } from '../../graphql/queries'
 import aws_exports from '../../aws-exports'
 import { CSVLink } from 'react-csv'
@@ -31,7 +31,7 @@ export default function ExportFile(props) {
 
     const urlBase = 'https://demons-cycle-storage202642-devt.s3.amazonaws.com/public/'
 
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState(null)
     const [JsonData,setJsonData]=useState("")
     const [open, setOpen]=useState(false)
     //const [brands, setBrands] = useState([])
@@ -278,8 +278,7 @@ export default function ExportFile(props) {
 
             //const productList = await DataStore.query(Product, c=> c.updateFlag("eq",true).status("eq", 'Active'))
             //const products = productList ? productList.filter(item => !item._deleted) : []
-
-            console.log("PRODUCTS: " ,products)
+            //console.log("PRODUCTS: " ,products)
 
             //.filter(item2 => item2.updateFlag) 
 
@@ -287,7 +286,7 @@ export default function ExportFile(props) {
               query: listProducts,
             })      
             const products = await productData.data.listProducts.items.filter(item => !item._deleted)*/   
-
+            console.log("PRODUCTS: ",products)
             setProducts(products)
 
             
@@ -1239,6 +1238,18 @@ const handleUpdateImages = async (excelFile) => {
     } catch(error) {
       console.log(error)
     }
+  }
+
+  if (!products) {  
+
+    return (
+        
+        <Container>
+
+            <Loader active style = {{top:350}} />        
+        </Container>
+        
+    )
   }
       
       
