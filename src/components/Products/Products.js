@@ -1324,7 +1324,7 @@ let filterMap = {
       //{ SKU: { matchPhrase: search } },
       { SKU: { wildcard: `*${search}*` } },
       //{ parentSKU: { match: `${search}` } },  
-      { mpn: { wildcard: `*${search}*` } },
+      { mpn: { eq: search } },
       { titleStore: { wildcard: `*${search}*` } },
       { descriptionStore: { wildcard: `*${search}*` } },
       //{ categoryID: { ne: `${categoryId}` } },
@@ -1558,7 +1558,7 @@ const fetchProducts = async () => {
       [ 
         { SKU: { wildcard: `*${search}*` } },
         //{ parentSKU: { match: `${search}` } },  
-        { mpn: { wildcard: `*${search}*` } },
+        { mpn: { eq: search } },
         { titleStore: { wildcard: `*${search}*` } },
         { descriptionStore: { wildcard: `*${search}*` } },
         /*{ brandID: { ne: `${brandId}` } },
