@@ -16,6 +16,7 @@ import aws_exports from '../../aws-exports'
 
 import { parse } from 'uuid'
 import EditCategoriesForm from '../Forms/EditCategoriesForm'
+import EditBrandsForm from '../Forms/EditBrandsForm'
 import SubCategories from '../SubCategories/SubCategories'
 import EditAttributesForm from '../Forms/EditAttributesForm'
 import FindReplaceForm from '../Forms/FindReplaceForm'
@@ -128,6 +129,15 @@ export default function Products() {
           subCategory2: {id: "", checked: false},
           ebayStoreCategory: {id:"", checked: false}
         })
+
+        const [editBrandSelected, setEditBrandSelected] = 
+        useState({
+          brand: {id:"", checked: false},
+          manufacturer: {id: "", checked: false},
+        })      
+        
+
+        
 
   //const [descriptionStore, setDescriptionStore] = useState('')
   
@@ -2250,6 +2260,36 @@ const handleAttributesSelectedCheckbox = (data) => {
           //console.log(editCategoriesSelected)
           }
 
+          const handleBrandSelectedBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditBrandSelected((values) => ({
+              ...values,
+              brand: {id: editBrandSelected.brand.id, checked: value},
+          }))
+          }
+
+          const handleBrandSelectedBulk = ({value}) => {
+            setEditBrandSelected((values) => ({
+              ...values,
+              brand: {id: value, checked: editBrandSelected.brand.checked},
+          }))
+          }
+
+          const handleManufacturerSelectedBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditBrandSelected((values) => ({
+              ...values,
+              manufacturer: {id: editBrandSelected.manufacturer.id, checked: value},
+          }))
+          }
+
+          const handleManufacturerSelectedBulk = ({value}) => {
+            setEditBrandSelected((values) => ({
+              ...values,
+              manufacturer: {id: value, checked: editBrandSelected.manufacturer.checked},
+          }))
+          }
+
           const handleSubCategorySelectedBulkChecked = (e, data) => {
             //evt.persist();
             //console.log(data.checked)
@@ -3096,6 +3136,83 @@ const handleApplyCategoriesChanges = async () => {
   }
 }
 
+const handleApplyBrandChanges = async () => {
+  
+  try {
+  setEditStatusModal(false)
+
+  let tempList = []
+  for (let item of productsSelected){
+     tempList.push(await updateBrands(item))
+  }
+  console.log(tempList)
+  setProducts(tempList)
+  setFindText('')
+  setReplaceText('')
+  setFindReplaceModal(false)
+  setProductsSelected([])
+  setProductsSelectedAll(false)
+
+
+  setTimeout(() => {
+    toast({
+        type: 'success',
+        icon: 'check circle outline',
+        size: 'tiny',              
+        description: productsSelected.length + ' Products successfully updated',
+        time: 2000,              
+    })
+  }, 200
+  ) 
+  
+} catch (error) {
+    console.log(error)
+  }
+}
+
+const updateBrands = async (id) => {
+  try {
+    
+    // ******************************
+
+    let product = products.find(item => item.id === id)
+    let version = product._version
+    let brandOld = product.brandID
+    let manufacturerOld = product.manufacturerID
+    
+    let productDetails = {
+      id,
+      brandID: editBrandSelected.brand.checked ? editBrandSelected.brand.id : brandOld, 
+      manufacturerID: editBrandSelected.manufacturer.checked ? editBrandSelected.manufacturer.id : manufacturerOld,
+      updateFlag: true,
+      _version: version,          
+    }
+    
+
+    let productEdited = await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))
+    
+    
+    return (productEdited.data.updateProduct)
+    
+    
+
+  } catch (err) {
+    setTimeout(() => {
+      toast({
+          type: 'error',
+          icon: 'times',
+          size: 'tiny',              
+          title: 'Error updating Brand',
+          description: err,              
+          time: 2000,              
+      });
+    }, 200);
+  }
+}
+
+
+
+
 const handleStatusProduct = async (value) => {  
   
   
@@ -3491,16 +3608,26 @@ const handleChangeProductsByPage = (e, {value}) => {
               onClose={() => setEditStatusModal(false)}              
               open={editStatusModal}              
             >
-              <Modal.Header>Edit Status <span style={{fontSize: 14}}>({productsSelected.length} Products Selected)</span></Modal.Header>
+              <Modal.Header>Edit Brand and Manufacturer <span style={{fontSize: 14}}>({productsSelected.length} Products Selected)</span></Modal.Header>
               <Modal.Content scrolling>
                 <Modal.Description>
+                <EditBrandsForm 
+                        brands = {brands} 
+                        manufacturers = {manufacturers} 
+                        handleBrandSelectedBulk = {(e,{value}) => handleBrandSelectedBulk({value})} 
+                        handleBrandSelectedBulkChecked = {(e,data) => handleBrandSelectedBulkChecked(e,data)}    
+                        handleManufacturerSelectedBulk = {(e,{value}) => handleManufacturerSelectedBulk({value})} 
+                        handleManufacturerSelectedBulkChecked = {(e,data) => handleManufacturerSelectedBulkChecked(e,data)}                    
+                        
+                        
+                        />
                   </Modal.Description>
               </Modal.Content>
               <Modal.Actions>
               <Button negative onClick={() => setEditStatusModal(false)}>
                 Cancel
               </Button>
-              <Button positive onClick={() => console.log("caramba")}>
+              <Button positive onClick={() => handleApplyBrandChanges()}>
                 Apply changes
               </Button>
  
@@ -3518,12 +3645,12 @@ const handleChangeProductsByPage = (e, {value}) => {
                   <Popup content='Edit Product Attributes in bulk' position='top center' offset={[0, 15]} inverted trigger={<Icon name='sliders horizontal' />} />
                   </Button>
                   
-                  {/*<Button onClick = {() => setEditPricesModal(true)} disabled = {productsSelected.length > 0 ? false : true} icon>
-                  <Popup content='Edit Prices' position='top center' offset={[0, 15]} inverted trigger={<Icon name='money bill alternate' />} />
+                  <Button onClick = {() => setEditPricesModal(true)} disabled = {productsSelected.length > 0 ? false : true} icon>
+                  <Popup content='Edit Prices in bulk' position='top center' offset={[0, 15]} inverted trigger={<Icon name='money bill alternate' />} />
                   </Button>
                   <Button onClick = {() => setEditStatusModal(true)} disabled = {productsSelected.length > 0 ? false : true} icon>
-                  <Popup content='Change Status' position='top center' offset={[0, 15]} inverted trigger={<Icon name='checkmark' />} />
-                  </Button>*/}
+                  <Popup content='Edit Brand and Manufacturer in bulk' position='top center' offset={[0, 15]} inverted trigger={<Icon name='motorcycle' />} />
+                  </Button>
                   {/*<Button disabled = {productsSelected.length > 0 ? false : true} icon>
                   <Popup content='Remove Products' position='top center' offset={[0, 15]} inverted trigger={<Icon name='delete' />} />
           </Button>*/}
