@@ -197,7 +197,7 @@ export default function CreateProductForm(props) {
 
                       
                      
-                    <Form.Field>
+                    <Form.Field required>
                       <label>Manufacturer Part Number</label>
                       <input placeholder='Manufacturer Part Number' 
                         value = {props.mpn} 
@@ -207,7 +207,7 @@ export default function CreateProductForm(props) {
                     <Grid>
                       <Grid.Row>
                           <Grid.Column width={8}>
-                              <Form.Field>
+                              <Form.Field required>
                               <label>Brand</label>
                                 <Dropdown placeholder='Select Brand' search searchInput={{ type: 'text' }} selection 
                                   options={brands} 
@@ -497,7 +497,7 @@ export default function CreateProductForm(props) {
                   <Grid>
                     <Grid.Row>
                       <Grid.Column width={8}>
-                    <Form.Field>
+                    <Form.Field required>
                     <label>Category</label>
                       <Dropdown placeholder='Select Category' search searchInput={{ type: 'text' }} selection 
                          options={categories} 
@@ -780,7 +780,7 @@ export default function CreateProductForm(props) {
                       <Grid>
                         <Grid.Row>
                     <Grid.Column width={12}>
-                    <Form.Field>
+                    <Form.Field required>
                       <label>Handle</label>
                       <input placeholder='Handle' 
                         value = {props.handle} 

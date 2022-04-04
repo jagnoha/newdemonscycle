@@ -187,13 +187,13 @@ export default function Products() {
           SKU: lastSKU, //productForm.sku, 
           mpn: productForm.mpn, // ? productForm.mpn : "",
           legacyID: productForm.legacyID, // ? productForm.legacyID : "",
-          parentSKU: productForm.parentSKU, // ? productForm.parentSKU : "",
-          binLocation: productForm.binLocation, // ? productForm.binLocation : "",
+          parentSKU: productForm.parentSKU ? productForm.parentSKU : "",
+          binLocation: productForm.binLocation ? productForm.binLocation : "",
           handle: productForm.handle, // ? productForm.handle : "",
-          shopifyFitmentTags: productForm.shopifyFitmentTags, // ? productForm.shopifyFitmentTags : "",
-          shopifyOnlyTags: productForm.shopifyOnlyTags, // ? productForm.shopifyOnlyTags : "",
-          shopifyMetaTitle: productForm.shopifyMetaTitle, // ? productForm.shopifyMetaTitle : "",
-          shopifyMetaDescription: productForm.shopifyMetaDescription, // ? productForm.shopifyMetaDescription : "",        
+          shopifyFitmentTags: productForm.shopifyFitmentTags ? productForm.shopifyFitmentTags : "",
+          shopifyOnlyTags: productForm.shopifyOnlyTags ? productForm.shopifyOnlyTags : "",
+          shopifyMetaTitle: productForm.shopifyMetaTitle ? productForm.shopifyMetaTitle : "",
+          shopifyMetaDescription: productForm.shopifyMetaDescription ? productForm.shopifyMetaDescription : "",        
           brandID: productForm.brandID,
           manufacturerID: productForm.manufacturerID,
           categoryID: productForm.categoryID,
@@ -205,19 +205,19 @@ export default function Products() {
             ebay: productForm.titleEbay,
             amazon: productForm.titleAmazon,
           },*/
-          titleStore: productForm.titleStore, // ? productForm.titleStore : "",
-          titleEbay: productForm.titleEbay, // ? productForm.titleEbay : "",
-          titleAmazon: productForm.titleAmazon, // ? productForm.titleAmazon : "",
+          titleStore: productForm.titleStore ? productForm.titleStore : "",
+          titleEbay: productForm.titleEbay ? productForm.titleEbay : "",
+          titleAmazon: productForm.titleAmazon ? productForm.titleAmazon : "",
           /*description: {
             store: productForm.descriptionStore,
             //store: descriptionStore,
             ebay: productForm.descriptionEbay,
             amazon: productForm.descriptionAmazon,
           },*/
-          descriptionStore: productForm.descriptionStore, // ? productForm.descriptionStore : "",
+          descriptionStore: productForm.descriptionStore ? productForm.descriptionStore : "",
           //store: descriptionStore,
-          descriptionEbay: productForm.descriptionEbay, // ? productForm.descriptionEbay : "",
-          descriptionAmazon: productForm.descriptionAmazon, // ? productForm.descriptionAmazon : "",
+          descriptionEbay: productForm.descriptionEbay ? productForm.descriptionEbay : "",
+          descriptionAmazon: productForm.descriptionAmazon ? productForm.descriptionAmazon : "",
           /*images: {
             image1: JSON.stringify(imageList[0]),
             image2: JSON.stringify(imageList[1]),
@@ -292,6 +292,7 @@ export default function Products() {
           //Attributes: productForm.Attributes,
           Attributes: attributesSelected ? JSON.stringify(attributesSelected) : "[]",
           updateFlag: true,
+          type: 'Product',
           newFlag: true,
           status: productForm.status ? productForm.status : 'Draft',          
         }
@@ -447,15 +448,15 @@ export default function Products() {
         let productDetails = {
           id,
           SKU: productForm.sku, 
-          mpn: productForm.mpn,
-          legacyID: productForm.legacyID,
-          parentSKU: productForm.parentSKU,
-          binLocation: productForm.binLocation,
+          mpn: productForm.mpn ? productForm.mpn : "",
+          legacyID: productForm.legacyID ? productForm.legacyID : "",
+          parentSKU: productForm.parentSKU ? productForm.parentSKU : "",
+          binLocation: productForm.binLocation ? productForm.binLocation : "",
           handle: productForm.handle,
-          shopifyFitmentTags: productForm.shopifyFitmentTags,
-          shopifyOnlyTags: productForm.shopifyOnlyTags,
-          shopifyMetaTitle: productForm.shopifyMetaTitle,
-          shopifyMetaDescription: productForm.shopifyMetaDescription,
+          shopifyFitmentTags: productForm.shopifyFitmentTags ? productForm.shopifyFitmentTags : "",
+          shopifyOnlyTags: productForm.shopifyOnlyTags ? productForm.shopifyOnlyTags : "",
+          shopifyMetaTitle: productForm.shopifyMetaTitle ? productForm.shopifyMetaTitle : "",
+          shopifyMetaDescription: productForm.shopifyMetaDescription ? productForm.shopifyMetaDescription : "",
         
           brandID: productForm.brandID,
           manufacturerID: productForm.manufacturerID,
@@ -468,19 +469,19 @@ export default function Products() {
             ebay: productForm.titleEbay,
             amazon: productForm.titleAmazon,
           },*/
-          titleStore: productForm.titleStore,
-          titleEbay: productForm.titleEbay,
-          titleAmazon: productForm.titleAmazon,         
+          titleStore: productForm.titleStore ? productForm.titleStore : "",
+          titleEbay: productForm.titleEbay ? productForm.titleEbay : "",
+          titleAmazon: productForm.titleAmazon ? productForm.titleAmazon : "",         
           /*description: {
             store: productForm.descriptionStore,
             //store: descriptionStore,
             ebay: productForm.descriptionEbay,
             amazon: productForm.descriptionAmazon,
           },*/
-          descriptionStore: productForm.descriptionStore,
+          descriptionStore: productForm.descriptionStore ? productForm.descriptionStore : "",
           //store: descriptionStore,
-          descriptionEbay: productForm.descriptionEbay,
-          descriptionAmazon: productForm.descriptionAmazon,          
+          descriptionEbay: productForm.descriptionEbay ? productForm.descriptionEbay : "",
+          descriptionAmazon: productForm.descriptionAmazon ? productForm.descriptionAmazon : "",          
           /*images: {
             image1: JSON.stringify(imageList[0]),
             image2: JSON.stringify(imageList[1]),
@@ -553,6 +554,7 @@ export default function Products() {
           Attributes: attributesSelected ? JSON.stringify(attributesSelected) : "[]",//productForm.Attributes,
           status: productForm.status ? productForm.status : 'Draft',
           updateFlag: true,
+          type: "Product",
           _version: version,          
         }
 
@@ -2737,6 +2739,7 @@ const updateFindReplace = async (id) => {
       shopifyMetaTitle: shopifyMetaTitleOld.replace(findText, replaceText),
       shopifyOnlyTags: shopifyOnlyTagsOld.replace(findText, replaceText),
       shopifyFitmentTags: shopifyFitmentTagsOld.replace(findText, replaceText),
+      updateFlag: true,
       _version: version,          
     }
 
@@ -2968,7 +2971,8 @@ const updateAttributes = async (id) => {
     
     let productDetails = {
       id,
-      Attributes: attributes, 
+      Attributes: attributes,
+      updateFlag: true, 
       _version: version,          
     }
     let productEdited = await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))
@@ -3009,6 +3013,7 @@ const updateCategories = async (id) => {
       subcategoryID: editCategoriesSelected.subCategory.checked ? editCategoriesSelected.subCategory.id : subCategoryOld,
       subcategory2ID: editCategoriesSelected.subCategory2.checked ? editCategoriesSelected.subCategory2.id : subCategoryOld2,
       ebaystorecategoryID: editCategoriesSelected.ebayStoreCategory.checked ? editCategoriesSelected.ebayStoreCategory.id : ebayStoreCategoryOld,
+      updateFlag: true,
       _version: version,          
     }
     
@@ -3624,7 +3629,7 @@ const handleChangeProductsByPage = (e, {value}) => {
               <Button negative onClick={handleClose}>
                 Cancel
               </Button>
-              <Button positive disabled = { !(  (productForm.sku || lastSKU) && (productForm.sourceWarehouse || productForm.sourceDropship) && productForm.handle  )  ? true : false} onClick={handleSubmit}>
+              <Button positive disabled = { !(  (productForm.sku || lastSKU) && (productForm.sourceWarehouse || productForm.sourceDropship) && productForm.handle && productForm.brandID && productForm.mpn && productForm.categoryID  )  ? true : false} onClick={handleSubmit}>
                 Add Product
               </Button>
  
@@ -3724,7 +3729,7 @@ const handleChangeProductsByPage = (e, {value}) => {
               <Button negative onClick={handleCloseUpdate}>
                 Cancel
               </Button>
-              <Button positive disabled = { !(  (productForm.sku || lastSKU) && (productForm.sourceWarehouse || productForm.sourceDropship) && productForm.handle  )  ? true : false} onClick={handleUpdate}>
+              <Button positive disabled = { !(  (productForm.sku || lastSKU) && (productForm.sourceWarehouse || productForm.sourceDropship) && productForm.brandID && productForm.handle && productForm.mpn && productForm.categoryID  )  ? true : false} onClick={handleUpdate}>
                 Save Product
               </Button>
  
