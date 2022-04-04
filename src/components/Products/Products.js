@@ -41,6 +41,7 @@ export default function Products() {
   const [nextTokenProduct, setNextTokenProduct] = useState("")
   const [tokenProductsList, setTokenProductsList] = useState([])
   const [processingProduct, setProcessingProduct] = useState(false)
+  const [lastSKU, setLastSKU] = useState("")
 
 
       
@@ -144,20 +145,30 @@ export default function Products() {
   
   const addProduct = async (imageList) => {
     try {
-      const productSearch = await API.graphql(
+      
+      /*const productSearch = await API.graphql(
         graphqlOperation(syncProducts, {
           filter: { SKU: { eq: `${productForm.sku}` } },
+      }))*/
+
+      let product = await API.graphql(
+        graphqlOperation(searchProducts, {          
+          filter: {SKU: {eq: lastSKU}},        
+          //sort: { field: 'SKU', direction: 'desc' }, //: 'asc' },          
       }))
+  
+      const productInSystem = product.data.searchProducts.items
 
       //console.log("PRODUCT FORM:", productForm)
 
-      const productInSystem = productSearch.data.syncProducts.items
-      console.log("PRODUCT IN SYSTEM *******:", productInSystem.length)
+      //const productInSystem = productSearch.data.syncProducts.items
+      //console.log("PRODUCT IN SYSTEM *******:", productInSystem.length)
 
         //const product = productForm
         //console.log(productForm);
         //if (products.find(item => item.SKU.toUpperCase() === product.sku.toUpperCase() ))  {
           if (productInSystem.length > 0)  {
+            setProcessingProduct(false)
             setTimeout(() => {
             toast({
                 type: 'error',
@@ -169,10 +180,11 @@ export default function Products() {
         }, 200); 
           return
         }
+        
         let id = uuidv4()
         let productInput = {
           id,
-          SKU: productForm.sku, 
+          SKU: lastSKU, //productForm.sku, 
           mpn: productForm.mpn,
           legacyID: productForm.legacyID,
           parentSKU: productForm.parentSKU,
@@ -301,6 +313,7 @@ export default function Products() {
       
       
       setProductForm({})
+      setLastSKU("")
       setAttributesSelected([])
       setStatusProduct('Active')
 
@@ -312,6 +325,7 @@ export default function Products() {
               description: 'Product successfully created',
               time: 2000,              
           })
+          setProcessingProduct(false)
           setOpen(false)
       
       }, 200)
@@ -696,6 +710,8 @@ const subscriptionUpdate = async (products) => await API.graphql(
   const handleSubmit = (evt) => {
       evt.preventDefault()
       
+      setProcessingProduct(true)
+      
       
       
       let imageList = serialFlow().then(value => { 
@@ -712,6 +728,7 @@ const subscriptionUpdate = async (products) => await API.graphql(
     /*setBrand(null)
     setManufacturer(null)*/
     setOpen(false)
+    setLastSKU("")
     setProductForm({})
     setImages([])
     setAttributesSelected([])
@@ -2051,10 +2068,23 @@ console.log(allProducts)
 
     const handleSKU = (evt) => {
         evt.persist();
+        
+        if (lastSKU){
+          setLastSKU( evt.target.value );
+          /*setProductForm((values) => ({
+            ...values,
+            sku: evt.target.value,
+            //sku: lastSKU
+          }))*/
+        } else {
+
         setProductForm((values) => ({
             ...values,
             sku: evt.target.value,
-        }));
+        }))
+      }
+
+      console.log(productForm)
 
     }
 
@@ -3180,6 +3210,24 @@ const handleChangeProductsByPage = (e, {value}) => {
   
   }
 
+  const handleOpenAddProduct = async () => {
+    
+    setOpen(true)
+
+    let product = await API.graphql(
+      graphqlOperation(searchProducts, {
+        
+        filter: {SKU: {regexp: "[0-9]+"}},        
+        sort: { field: 'SKU', direction: 'desc' }, //: 'asc' },
+        
+    }))
+
+    let SKU = parseInt(product.data.searchProducts.items[0].SKU) + 1
+
+    console.log("************************ ", SKU , " **************************")
+    setLastSKU(SKU)
+
+  }
               
 
     const handleEditSKU = (evt) => {
@@ -3484,12 +3532,14 @@ const handleChangeProductsByPage = (e, {value}) => {
                   
                 </Button.Group>
 
-
+            {!processingProduct ?
             <Modal
               closeOnEscape={true}
               closeOnDimmerClick={false}            
-              onClose={() => setOpen(false)}
-              onOpen={() => setOpen(true)}
+              onClose={() => setOpen(false) }
+              //onOpen={() => { setOpen(true);console.log("********************************** ADDING PRODUCT!!!!!!!!!!!!!!!! ************************************") } }
+              onOpen={handleOpenAddProduct}
+              
               open={open}
               trigger={<Button floated='right'
                             icon
@@ -3506,7 +3556,8 @@ const handleChangeProductsByPage = (e, {value}) => {
                   
                   
                   <CreateProductForm 
-                      sku = {productForm.sku} handleSKU = {(e) => handleSKU(e)}
+                      sku = {lastSKU} /*{lastSKU ? lastSKU : productForm.sku}*/ handleSKU = {(e) => handleSKU(e)}
+                      blockSKU = {false}
                       mpn = {productForm.mpn} handleMPN = {(e) => handleMPN(e)}
                       legacyId = {productForm.legacyID} handleLegacyId = {(e) => handleLegacyId(e)}
                       parentSKU = {productForm.parentSKU} handleParentSKU = {(e) => handleParentSKU(e)}
@@ -3580,12 +3631,12 @@ const handleChangeProductsByPage = (e, {value}) => {
               <Button negative onClick={handleClose}>
                 Cancel
               </Button>
-              <Button positive disabled = { !(productForm.sku && (productForm.sourceWarehouse || productForm.sourceDropship))  ? true : false} onClick={handleSubmit}>
+              <Button positive disabled = { !(  (productForm.sku || lastSKU) && (productForm.sourceWarehouse || productForm.sourceDropship)  )  ? true : false} onClick={handleSubmit}>
                 Add Product
               </Button>
  
               </Modal.Actions>
-            </Modal>
+            </Modal> : <div></div>}
 
             {!processingProduct ?
             <Modal
@@ -3608,6 +3659,7 @@ const handleChangeProductsByPage = (e, {value}) => {
                   
                 <CreateProductForm 
                       sku = {productForm.sku} handleSKU = {(e) => handleSKU(e)}
+                      blockSKU = {true}
                       mpn = {productForm.mpn} handleMPN = {(e) => handleMPN(e)}
                       legacyId = {productForm.legacyID} handleLegacyId = {(e) => handleLegacyId(e)}
                       parentSKU = {productForm.parentSKU} handleParentSKU = {(e) => handleParentSKU(e)}

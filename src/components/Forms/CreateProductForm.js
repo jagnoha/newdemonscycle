@@ -134,9 +134,9 @@ export default function CreateProductForm(props) {
                         <Grid.Column width={12}>
                     <Form.Field required>
                       <label>SKU</label>
-                      <input placeholder='Product SKU' 
+                      <input placeholder='Product SKU'
                         value = {props.sku}
-                        onChange = {props.handleSKU}
+                        onChange = {props.blockSKU === false ? props.handleSKU : () => console.log("blocked")}
                       />
                     </Form.Field>
                     </Grid.Column>
@@ -151,7 +151,7 @@ export default function CreateProductForm(props) {
                     <Form.Field>
                       <label>Parent SKU</label>
                       <input placeholder='Parent SKU' 
-                        value = {props.parentSKU} 
+                        value = {props.parentSKU}                         
                         //onBlur = {props.handleParentSKU}
                         onChange={props.handleParentSKU }
                         />
