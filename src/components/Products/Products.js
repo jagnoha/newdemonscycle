@@ -19,6 +19,7 @@ import EditCategoriesForm from '../Forms/EditCategoriesForm'
 import EditBrandsForm from '../Forms/EditBrandsForm'
 import SubCategories from '../SubCategories/SubCategories'
 import EditAttributesForm from '../Forms/EditAttributesForm'
+import EditPricesForm from '../Forms/EditPricesForm'
 import FindReplaceForm from '../Forms/FindReplaceForm'
 import Filter from '../Filter/Filter'
 import { DataStore, Predicates, SortDirection } from 'aws-amplify'
@@ -134,7 +135,21 @@ export default function Products() {
         useState({
           brand: {id:"", checked: false},
           manufacturer: {id: "", checked: false},
-        })      
+        })     
+        
+        const [editPriceSelected, setEditPriceSelected] = 
+        useState({
+          cost: {value: 0, checked: false},
+          priceMSRP: {value: 0, checked: false},
+          priceMAP: {value: 0, checked: false},
+          priceStore: {value: 0, checked: false},
+          priceEbay: {value: 0, checked: false},
+          priceAmazon: {value: 0, checked: false},
+          priceWholesaleLow: {value: 0, checked: false},
+          priceWholesaleHigh: {value: 0, checked: false},
+          priceScratchLow: {value: 0, checked: false},
+          priceScratchHigh: {value: 0, checked: false},          
+        })
         
 
         
@@ -2275,6 +2290,166 @@ const handleAttributesSelectedCheckbox = (data) => {
           }))
           }
 
+          const handleCostBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                cost: { value: evt.target.value, checked: editPriceSelected.cost.checked},
+            }))
+          }
+
+          const handleCostBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                cost: { value: editPriceSelected.cost.value, checked: value},
+            }))
+          }
+
+          const handlePriceMSRPBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceMSRP: { value: evt.target.value, checked: editPriceSelected.priceMSRP.checked},
+            }))
+          }
+
+          const handlePriceMSRPBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceMSRP: { value: editPriceSelected.priceMSRP.value, checked: value},
+            }))
+          }
+
+          const handlePriceStoreBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceStore: { value: evt.target.value, checked: editPriceSelected.priceStore.checked},
+            }))
+          }
+
+          const handlePriceStoreBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceStore: { value: editPriceSelected.priceStore.value, checked: value},
+            }))
+          }
+
+          const handlePriceEbayBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceEbay: { value: evt.target.value, checked: editPriceSelected.priceEbay.checked},
+            }))
+          }
+
+          const handlePriceEbayBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceEbay: { value: editPriceSelected.priceEbay.value, checked: value},
+            }))
+          }
+
+          const handlePriceAmazonBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceAmazon: { value: evt.target.value, checked: editPriceSelected.priceAmazon.checked},
+            }))
+          }
+
+          const handlePriceAmazonBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceAmazon: { value: editPriceSelected.priceAmazon.value, checked: value},
+            }))
+          }
+
+          const handlePriceMAPBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceMAP: { value: evt.target.value, checked: editPriceSelected.priceMAP.checked},
+            }))
+          }
+
+          const handlePriceMAPBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceMAP: { value: editPriceSelected.priceMAP.value, checked: value},
+            }))
+          }
+
+          const handlePriceWholesaleLowBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceWholesaleLow: { value: evt.target.value, checked: editPriceSelected.priceWholesaleLow.checked},
+            }))
+          }
+
+          const handlePriceWholesaleLowBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceWholesaleLow: { value: editPriceSelected.priceWholesaleLow.value, checked: value},
+            }))
+          }
+
+          const handlePriceWholesaleHighBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceWholesaleHigh: { value: evt.target.value, checked: editPriceSelected.priceWholesaleHigh.checked},
+            }))
+          }
+
+          const handlePriceWholesaleHighBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceWholesaleHigh: { value: editPriceSelected.priceWholesaleHigh.value, checked: value},
+            }))
+          }
+
+          const handlePriceScratchLowBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceScratchLow: { value: evt.target.value, checked: editPriceSelected.priceScratchLow.checked},
+            }))
+          }
+
+          const handlePriceScratchLowBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceScratchLow: { value: editPriceSelected.priceScratchLow.value, checked: value},
+            }))
+          }
+
+          const handlePriceScratchHighBulk = (evt) => {
+            evt.persist();
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceScratchHigh: { value: evt.target.value, checked: editPriceSelected.priceScratchHigh.checked},
+            }))
+          }
+
+          const handlePriceScratchHighBulkChecked = (e, data) => {
+            let value = data.checked
+            setEditPriceSelected((values) => ({
+                ...values,
+                priceScratchHigh: { value: editPriceSelected.priceScratchHigh.value, checked: value},
+            }))
+          }
+
           const handleManufacturerSelectedBulkChecked = (e, data) => {
             let value = data.checked
             setEditBrandSelected((values) => ({
@@ -3210,6 +3385,103 @@ const updateBrands = async (id) => {
   }
 }
 
+const handleApplyPricesChanges = async () => {
+  
+  try {
+  
+  setEditPricesModal(false); 
+               
+
+  let tempList = []
+  for (let item of productsSelected){
+     tempList.push(await updatePricesBulk(item))
+  }
+  console.log(tempList)
+  setProducts(tempList)
+  setFindText('')
+  setReplaceText('')
+  setFindReplaceModal(false)
+  setProductsSelected([])
+  setProductsSelectedAll(false)
+
+
+  setTimeout(() => {
+    toast({
+        type: 'success',
+        icon: 'check circle outline',
+        size: 'tiny',              
+        description: productsSelected.length + ' Products successfully updated',
+        time: 2000,              
+    })
+  }, 200
+  ) 
+  
+} catch (error) {
+    console.log(error)
+  }
+}
+
+const updatePricesBulk = async (id) => {
+  try {
+    
+    // ******************************
+
+    let product = products.find(item => item.id === id)
+    let version = product._version
+    let priceMSRPOld = product.priceMSRP
+    let costOld = product.cost
+    let priceMAPOld = product.priceMAP
+    let priceStoreOld = product.priceStore
+    let priceEbayOld = product.priceEbay
+    let priceAmazonOld = product.priceAmazon
+    let priceWholesaleLowOld = product.priceWholesaleLow
+    let priceWholesaleHighOld = product.priceWholesaleHigh
+    let priceScratchLowOld = product.priceScratchLow
+    let priceScratchHighOld = product.priceScratchHigh
+
+    
+
+    
+    let productDetails = {
+      id,
+      priceMSRP: editPriceSelected.priceMSRP.checked ? editPriceSelected.priceMSRP.value : priceMSRPOld,
+      cost: editPriceSelected.cost.checked ? editPriceSelected.cost.value : costOld,
+      priceMAP: editPriceSelected.priceMAP.checked ? editPriceSelected.priceMAP.value : priceMAPOld,
+      priceStore: editPriceSelected.priceStore.checked ? editPriceSelected.priceStore.value : priceStoreOld,
+      priceEbay: editPriceSelected.priceEbay.checked ? editPriceSelected.priceEbay.value : priceEbayOld,
+      priceAmazon: editPriceSelected.priceAmazon.checked ? editPriceSelected.priceAmazon.value : priceAmazonOld,
+      priceWholesaleLow: editPriceSelected.priceWholesaleLow.checked ? editPriceSelected.priceWholesaleLow.value : priceWholesaleLowOld,
+      priceWholesaleHigh: editPriceSelected.priceWholesaleHigh.checked ? editPriceSelected.priceWholesaleHigh.value : priceWholesaleHighOld,
+      priceScratchLow: editPriceSelected.priceScratchLow.checked ? editPriceSelected.priceScratchLow.value : priceScratchLowOld,
+      priceScratchHigh: editPriceSelected.priceScratchHigh.checked ? editPriceSelected.priceScratchHigh.value : priceScratchHighOld,
+     
+      updateFlag: true,
+      _version: version,          
+    }
+    
+
+    let productEdited = await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))
+    console.log("*************************** ", productEdited.data.updateProduct, " ******************************")
+    
+    
+    return (productEdited.data.updateProduct)
+    
+    
+
+  } catch (err) {
+    setTimeout(() => {
+      toast({
+          type: 'error',
+          icon: 'times',
+          size: 'tiny',              
+          title: 'Error updating Brand',
+          description: err,              
+          time: 2000,              
+      });
+    }, 200);
+  }
+}
+
 
 
 
@@ -3371,6 +3643,7 @@ const handleChangeProductsByPage = (e, {value}) => {
     //console.log("^^^^^^^^^^^^^^^^^^^", productForm)
     //console.log(attributesSelected)
     //console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", attributes)
+    console.log("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP >>>>>>>>>>>>>>>> ", editPriceSelected)
     return (
       
         <div style={divStyle}>
@@ -3589,13 +3862,80 @@ const handleChangeProductsByPage = (e, {value}) => {
               <Modal.Header>Edit Prices <span style={{fontSize: 14}}>({productsSelected.length} Products Selected)</span></Modal.Header>
               <Modal.Content scrolling>
                 <Modal.Description>
+
+                <EditPricesForm 
+                        
+                        priceMSRP = {editPriceSelected.priceMSRP.value} 
+                        handlePriceMSRPBulk = {(e) => handlePriceMSRPBulk(e)} 
+                        handlePriceMSRPBulkChecked = {(e, data) => handlePriceMSRPBulkChecked(e, data)}
+                        
+                        
+                        priceMAP = {editPriceSelected.priceMAP.value} 
+                        handlePriceMAPBulk = {(e) => handlePriceMAPBulk(e)}
+                        handlePriceMAPBulkChecked = {(e, data) => handlePriceMAPBulkChecked(e, data)}
+                        
+                        
+                        priceStore = {editPriceSelected.priceStore.value} 
+                        handlePriceStoreBulk = {(e) => handlePriceStoreBulk(e)}
+                        handlePriceStoreBulkChecked = {(e, data) => handlePriceStoreBulkChecked(e, data)}
+                        
+                        priceEbay = {editPriceSelected.priceEbay.value} 
+                        handlePriceEbayBulk = {(e) => handlePriceEbayBulk(e)}
+                        handlePriceEbayBulkChecked = {(e, data) => handlePriceEbayBulkChecked(e, data)}
+
+                        priceAmazon = {editPriceSelected.priceAmazon.value} 
+                        handlePriceAmazonBulk = {(e) => handlePriceAmazonBulk(e)}
+                        handlePriceAmazonBulkChecked = {(e, data) => handlePriceAmazonBulkChecked(e, data)}
+                        
+                        priceWholesaleLow = {editPriceSelected.priceWholesaleLow.value} 
+                        handlePriceWholesaleLowBulk = {(e) => handlePriceWholesaleLowBulk(e)}
+                        handlePriceWholesaleLowBulkChecked = {(e, data) => handlePriceWholesaleLowBulkChecked(e, data)}                        
+                        
+                        priceWholesaleHigh = {editPriceSelected.priceWholesaleHigh.value} 
+                        handlePriceWholesaleHighBulk = {(e) => handlePriceWholesaleHighBulk(e)}
+                        handlePriceWholesaleHighBulkChecked = {(e, data) => handlePriceWholesaleHighBulkChecked(e, data)}
+                        
+                        priceScratchLow = {editPriceSelected.priceScratchLow.value} 
+                        handlePriceScratchLowBulk = {(e) => handlePriceScratchLowBulk(e)}
+                        handlePriceScratchLowBulkChecked = {(e, data) => handlePriceScratchLowBulkChecked(e, data)}
+                        
+                        priceScratchHigh = {editPriceSelected.priceScratchHigh.value} 
+                        handlePriceScratchHighBulk = {(e) => handlePriceScratchHighBulk(e)}
+                        handlePriceScratchHighBulkChecked = {(e, data) => handlePriceScratchHighBulkChecked(e, data)}
+                        
+                        cost = {editPriceSelected.cost.value} 
+                        handleCostBulk = {(e) => handleCostBulk(e)}
+                        handleCostBulkChecked = {(e, data) => handleCostBulkChecked(e, data)}                          
+                      
+
+                        
+                        
+                        />
+
                   </Modal.Description>
               </Modal.Content>
               <Modal.Actions>
-              <Button negative onClick={() => setEditPricesModal(false)}>
+              <Button negative onClick={() => { 
+                setEditPricesModal(false); 
+                setEditPriceSelected(
+                  {
+                    cost: {value: 0, checked: false},
+                    priceMSRP: {value: 0, checked: false},
+                    priceMAP: {value: 0, checked: false},
+                    priceStore: {value: 0, checked: false},
+                    priceEbay: {value: 0, checked: false},
+                    priceAmazon: {value: 0, checked: false},
+                    priceWholesaleLow: {value: 0, checked: false},
+                    priceWholesaleHigh: {value: 0, checked: false},
+                    priceScratchLow: {value: 0, checked: false},
+                    priceScratchHigh: {value: 0, checked: false},          
+                  }
+                )
+              
+              }}>
                 Cancel
               </Button>
-              <Button positive onClick={() => console.log("caramba")}>
+              <Button positive onClick={() => handleApplyPricesChanges()}>
                 Apply changes
               </Button>
  
