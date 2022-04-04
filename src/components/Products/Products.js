@@ -185,15 +185,15 @@ export default function Products() {
         let productInput = {
           id,
           SKU: lastSKU, //productForm.sku, 
-          mpn: productForm.mpn,
-          legacyID: productForm.legacyID,
-          parentSKU: productForm.parentSKU,
-          binLocation: productForm.binLocation,
-          handle: productForm.handle,
-          shopifyFitmentTags: productForm.shopifyFitmentTags,
-          shopifyOnlyTags: productForm.shopifyOnlyTags,
-          shopifyMetaTitle: productForm.shopifyMetaTitle,
-          shopifyMetaDescription: productForm.shopifyMetaDescription,        
+          mpn: productForm.mpn, // ? productForm.mpn : "",
+          legacyID: productForm.legacyID, // ? productForm.legacyID : "",
+          parentSKU: productForm.parentSKU, // ? productForm.parentSKU : "",
+          binLocation: productForm.binLocation, // ? productForm.binLocation : "",
+          handle: productForm.handle, // ? productForm.handle : "",
+          shopifyFitmentTags: productForm.shopifyFitmentTags, // ? productForm.shopifyFitmentTags : "",
+          shopifyOnlyTags: productForm.shopifyOnlyTags, // ? productForm.shopifyOnlyTags : "",
+          shopifyMetaTitle: productForm.shopifyMetaTitle, // ? productForm.shopifyMetaTitle : "",
+          shopifyMetaDescription: productForm.shopifyMetaDescription, // ? productForm.shopifyMetaDescription : "",        
           brandID: productForm.brandID,
           manufacturerID: productForm.manufacturerID,
           categoryID: productForm.categoryID,
@@ -205,19 +205,19 @@ export default function Products() {
             ebay: productForm.titleEbay,
             amazon: productForm.titleAmazon,
           },*/
-          titleStore: productForm.titleStore,
-          titleEbay: productForm.titleEbay,
-          titleAmazon: productForm.titleAmazon,
+          titleStore: productForm.titleStore, // ? productForm.titleStore : "",
+          titleEbay: productForm.titleEbay, // ? productForm.titleEbay : "",
+          titleAmazon: productForm.titleAmazon, // ? productForm.titleAmazon : "",
           /*description: {
             store: productForm.descriptionStore,
             //store: descriptionStore,
             ebay: productForm.descriptionEbay,
             amazon: productForm.descriptionAmazon,
           },*/
-          descriptionStore: productForm.descriptionStore,
+          descriptionStore: productForm.descriptionStore, // ? productForm.descriptionStore : "",
           //store: descriptionStore,
-          descriptionEbay: productForm.descriptionEbay,
-          descriptionAmazon: productForm.descriptionAmazon,
+          descriptionEbay: productForm.descriptionEbay, // ? productForm.descriptionEbay : "",
+          descriptionAmazon: productForm.descriptionAmazon, // ? productForm.descriptionAmazon : "",
           /*images: {
             image1: JSON.stringify(imageList[0]),
             image2: JSON.stringify(imageList[1]),
@@ -231,15 +231,7 @@ export default function Products() {
             image10: JSON.stringify(imageList[9]),
           },*/
           images: JSON.stringify(imageList),
-          bulletPoints: [
-            productForm.bullet1,
-            productForm.bullet2,
-            productForm.bullet3,
-            productForm.bullet4,
-            productForm.bullet5,
-            productForm.bullet6,
-            productForm.bullet7
-          ],
+          
           /*bulletPoints: {
             bullet1: productForm.bullet1,  
             bullet2: productForm.bullet2,
@@ -297,7 +289,8 @@ export default function Products() {
           },*/
           sourceWarehouse: productForm.sourceWarehouse,
           sourceDropship: productForm.sourceDropship,
-          Attributes: productForm.Attributes,
+          //Attributes: productForm.Attributes,
+          Attributes: attributesSelected ? JSON.stringify(attributesSelected) : "[]",
           updateFlag: true,
           newFlag: true,
           status: productForm.status ? productForm.status : 'Draft',          
@@ -557,7 +550,7 @@ export default function Products() {
           },*/
           sourceWarehouse: productForm.sourceWarehouse,
           sourceDropship: productForm.sourceDropship,          
-          Attributes: attributesSelected ? JSON.stringify(attributesSelected) : "",//productForm.Attributes,
+          Attributes: attributesSelected ? JSON.stringify(attributesSelected) : "[]",//productForm.Attributes,
           status: productForm.status ? productForm.status : 'Draft',
           updateFlag: true,
           _version: version,          
@@ -3631,7 +3624,7 @@ const handleChangeProductsByPage = (e, {value}) => {
               <Button negative onClick={handleClose}>
                 Cancel
               </Button>
-              <Button positive disabled = { !(  (productForm.sku || lastSKU) && (productForm.sourceWarehouse || productForm.sourceDropship)  )  ? true : false} onClick={handleSubmit}>
+              <Button positive disabled = { !(  (productForm.sku || lastSKU) && (productForm.sourceWarehouse || productForm.sourceDropship) && productForm.handle  )  ? true : false} onClick={handleSubmit}>
                 Add Product
               </Button>
  
@@ -3731,7 +3724,7 @@ const handleChangeProductsByPage = (e, {value}) => {
               <Button negative onClick={handleCloseUpdate}>
                 Cancel
               </Button>
-              <Button positive onClick={handleUpdate}>
+              <Button positive disabled = { !(  (productForm.sku || lastSKU) && (productForm.sourceWarehouse || productForm.sourceDropship) && productForm.handle  )  ? true : false} onClick={handleUpdate}>
                 Save Product
               </Button>
  
