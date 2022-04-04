@@ -15,7 +15,7 @@ export default function SubCategories() {
   const [subCategorys, setSubCategorys] = useState([])
   const [activePage, setActivePage] = useState(1)
   const [search, setSearch] = useState("")
-  const [orderColumn, setOrderColumn] = useState({column: null, direction: 'descending'})
+  const [orderColumn, setOrderColumn] = useState({column: 'name', direction: 'ascending'})
   const [open, setOpen] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const [subCategoryName, setSubCategoryName] = useState("")
