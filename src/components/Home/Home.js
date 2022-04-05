@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Amplify, { API, graphqlOperation, Storage } from 'aws-amplify'
 import Header from '../Header/Header';
-import { Menu, Segment, Grid, Icon, Divider, Container, Tab, Label, Input, Table} from 'semantic-ui-react'
+import { Menu, Segment, Grid, Icon, Divider, Container, Tab, Label, Input, Table, Image, Loader} from 'semantic-ui-react'
 import { SemanticToastContainer, toast } from 'react-semantic-toasts'
 import { searchProducts } from '../../graphql/queries'
 
@@ -10,16 +10,38 @@ import { searchProducts } from '../../graphql/queries'
 
 export default function Home(props) {
 
-  const [products24hrsUpdated, setProducts24hrsUpdated] = useState([])
-  const [products7daysUpdated, setProducts7daysUpdated] = useState([])
-  const [products31daysUpdated, setProducts31daysUpdated] = useState([])
-  const [products90daysUpdated, setProducts90daysUpdated] = useState([])
+  const [productsLast5Updated, setProductsLast5Updated] = useState(null)
+  const [products24hrsUpdated, setProducts24hrsUpdated] = useState(null)
+  const [products7daysUpdated, setProducts7daysUpdated] = useState(null)
+  const [products31daysUpdated, setProducts31daysUpdated] = useState(null)
+  const [products90daysUpdated, setProducts90daysUpdated] = useState(null)
 
-  const [products24hrsCreated, setProducts24hrsCreated] = useState([])
-  const [products7daysCreated, setProducts7daysCreated] = useState([])
-  const [products31daysCreated, setProducts31daysCreated] = useState([])
-  const [products90daysCreated, setProducts90daysCreated] = useState([])
+  const [productsLast5Created, setProductsLast5Created] = useState(null)
+  const [products24hrsCreated, setProducts24hrsCreated] = useState(null)
+  const [products7daysCreated, setProducts7daysCreated] = useState(null)
+  const [products31daysCreated, setProducts31daysCreated] = useState(null)
+  const [products90daysCreated, setProducts90daysCreated] = useState(null)
 
+  
+  const fetchLast5 = async () => {
+
+    
+    let productUpdated = await API.graphql(
+      graphqlOperation(searchProducts, {
+        sort: { field: 'updatedOn', direction: 'desc' },
+        limit: 5,       
+    }))
+
+    let productCreated = await API.graphql(
+      graphqlOperation(searchProducts, {
+        sort: { field: 'createdOn', direction: 'desc' },
+        limit: 5,       
+    }))
+
+    setProductsLast5Updated(productUpdated.data.searchProducts.items)
+    setProductsLast5Created(productCreated.data.searchProducts.items)
+  }
+  
   const fetchProducts24hrs = async () => {
 
     let d = new Date()
@@ -117,14 +139,31 @@ export default function Home(props) {
   }
 
   useEffect(() => {
+    fetchLast5()
     fetchProducts24hrs()
     fetchProducts7days()
     fetchProducts31days()
     fetchProducts90days()
+    
   }, [])
 
   console.log(products24hrsUpdated)
+  console.log(productsLast5Updated)
   
+
+  if (!productsLast5Updated || !productsLast5Created){ //|| !products31daysCreated || !products31daysUpdated || !products7daysCreated || !products7daysUpdated || !products90daysUpdated || !products90daysCreated ) {  
+
+    return (
+        
+        <Container>
+
+            <Loader active style = {{top:350}} />        
+        </Container>
+        
+    )
+
+    } 
+
   return (
     <div style={divStyle}>
         <SemanticToastContainer position="top-center" />
@@ -158,6 +197,94 @@ export default function Home(props) {
               </Table.Row>
             </Table.Body>
         </Table>
+
+        <Grid columns={2} divided style={{paddingTop: 20}}>
+          <Grid.Row>
+            <Grid.Column>
+            <h3>Last Products Updated</h3>
+            <Table celled selectable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell width={1}></Table.HeaderCell>
+                  <Table.HeaderCell width={3}>SKU</Table.HeaderCell>
+                  <Table.HeaderCell width={2}>Source</Table.HeaderCell>
+                  <Table.HeaderCell width={7}>Title</Table.HeaderCell>
+                  <Table.HeaderCell width={3}>MPN</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+                  <Table.Body>
+                    {productsLast5Updated.map((item) => 
+                    
+                        <Table.Row key={item.id}>
+                          <Table.Cell >
+                            <Image src={JSON.parse(item.images).length > 0 ? JSON.parse(item.images)[0].data_url : ""} size='mini' />
+                          </Table.Cell>
+                          <Table.Cell >
+                              {item.SKU}
+                          </Table.Cell>
+                          <Table.Cell >
+                              {item.sourceWarehouse ? <Label color='blue' size={"mini"}>Warehouse</Label> : ''}  
+                              {item.sourceDropship ? <Label color='orange' size={"mini"}>Dropship</Label> : ''}  
+                          </Table.Cell>
+                          <Table.Cell >
+                              {item.titleStore}
+                          </Table.Cell>
+                          <Table.Cell >
+                              {item.mpn}
+                          </Table.Cell>
+                        </Table.Row>
+                      
+                    )}
+                   
+                   </Table.Body>
+              </Table>
+            
+            
+            </Grid.Column>
+            <Grid.Column>
+                <h3>Last Products Created</h3>
+                <Table celled selectable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell width={1}></Table.HeaderCell>
+                  <Table.HeaderCell width={3}>SKU</Table.HeaderCell>
+                  <Table.HeaderCell width={2}>Source</Table.HeaderCell>
+                  <Table.HeaderCell width={7}>Title</Table.HeaderCell>
+                  <Table.HeaderCell width={3}>MPN</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+                  <Table.Body>
+                  {productsLast5Created.map((item) => 
+                    
+                    <Table.Row key={item.id}>
+                      <Table.Cell >
+                        <Image src={JSON.parse(item.images).length > 0 ? JSON.parse(item.images)[0].data_url : ""} size='mini' />
+                      </Table.Cell>
+                      <Table.Cell >
+                          {item.SKU}
+                      </Table.Cell>
+                      <Table.Cell >
+                          {item.sourceWarehouse ? <Label color='blue' size={"mini"}>Warehouse</Label> : ''}  
+                          {item.sourceDropship ? <Label color='orange' size={"mini"}>Dropship</Label> : ''}  
+                      </Table.Cell>
+                      <Table.Cell >
+                          {item.titleStore}
+                      </Table.Cell>
+                      <Table.Cell >
+                          {item.mpn}
+                      </Table.Cell>
+                    </Table.Row>
+                  
+                )}
+                  </Table.Body>
+              </Table>
+            
+            
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
 
     </div>  
   );
