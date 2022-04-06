@@ -7,7 +7,7 @@ import aws_exports from '../../aws-exports'
 import { CSVLink } from 'react-csv'
 import { attachEventProps } from '@aws-amplify/ui-react/lib-esm/react-component-lib/utils'
 //import Papa from "papaparse"
-import {ExcelToJson} from 'excel-to-json-in-react-js'
+//import {ExcelToJson} from 'excel-to-json-in-react-js'
 import xlsx from 'xlsx'
 import { v4 as uuidv4 } from 'uuid'
 import { createCategory, createSubCategory, createManufacturer, createProduct, updateProduct, createBrand, createSubCategory2, createEbayStoreCategory, createAttribute } from '../../graphql/mutations'
@@ -193,7 +193,7 @@ export default function ExportFile(props) {
         //fetchAttributes()
         //DataStore.clear()
         fetchProducts()
-        fetchAllProducts()
+        //fetchAllProducts()
        
           
     }
@@ -272,26 +272,12 @@ export default function ExportFile(props) {
             }`
           
             const allProducts = await API.graphql(graphqlOperation(listProductsQuery))
-            //const products = allProducts ? allProducts.filter(item => !item._deleted) : []
-            const products = allProducts.data.syncProducts.items ? allProducts.data.syncProducts.items.filter(item => !item._deleted) : []
-
-            //console.log("ALL PRODUCTS: ", allProducts)
-
-
-            //const productList = await DataStore.query(Product, c=> c.updateFlag("eq",true).status("eq", 'Active'))
-            //const products = productList ? productList.filter(item => !item._deleted) : []
-            //console.log("PRODUCTS: " ,products)
-
-            //.filter(item2 => item2.updateFlag) 
-
-            /*const productData = await API.graphql({
-              query: listProducts,
-            })      
-            const products = await productData.data.listProducts.items.filter(item => !item._deleted)*/   
-            console.log("PRODUCTS: ",products)
-            setProducts(products)
-
             
+            const products = allProducts.data.syncProducts.items ? allProducts.data.syncProducts.items.filter(item => !item._deleted) : []
+              
+            console.log("PRODUCTS: ",products)
+            
+            setProducts(products)
             
             let result = [];
 
@@ -325,9 +311,7 @@ export default function ExportFile(props) {
                   
                 let MSRP = item.priceMSRP || item.priceMSRP > 0 ? item.priceMSRP : ""
                 let MAP = item.priceMAP || item.priceMAP > 0 ? item.priceMAP : ""
-
-                //let listPrice = ""
-                //let myStore = item.priceStore ? item.priceStore : ""
+                
                 let sourceWarehouse = item.sourceWarehouse ? item.sourceWarehouse : false
                 let sourceDropship = item.sourceDropship ? item.sourceDropship : false
                 let attributesParse = item.Attributes ? JSON.parse(item.Attributes) : []
@@ -360,23 +344,15 @@ export default function ExportFile(props) {
                         product[`OptionValue${n}`] = itemList.value
                     }
                     product[`${name.split(' ').join('')}`] = itemList.value
-
-                    /*let productDetails = {
-                      id: itemList.id,
-                      updateFlag: false,
-                      _version: itemList._version,          
-                    }
-                    await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))*/
-                }
-
-                //console.log(product)
+                    
+                }                
 
                 if (sourceWarehouse) {
-                    //product.Source = 'DEMONS'
+                    
                     result.push({...product, Source: 'DEMONS'})
                 }
                 if (sourceDropship) {
-                    //product.Source = 'DROPSHIP'
+                    
                     result.push({...product, Source: 'DROPSHIP'})
                 }
                 
@@ -390,9 +366,7 @@ export default function ExportFile(props) {
                 if (!item.newFlag){
                   resultReviseEbay.push({Action: "Revise", ItemID: item.SKU, Category: category.ebayCode, Title: item.titleEbay, Description: description, PicURL: image1,
                   Brand: brandName, MPN: item.mpn })
-                }
-
-                //result.push(product)
+                }               
             
             }
             

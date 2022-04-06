@@ -60,7 +60,11 @@ export default function Main(props) {
         },                
         {
           path: "/reports",
-          main: () => <Reports />,          
+          main: () => <Reports attributes = {attributes} 
+                                brands = {brands} 
+                                categories = {categories}
+                                subCategories = {subCategories}
+                                subCategories2 = {subCategories2}/>,          
         },
         {
           path: "/settings",
