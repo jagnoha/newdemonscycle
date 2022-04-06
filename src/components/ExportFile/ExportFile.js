@@ -156,6 +156,8 @@ export default function ExportFile(props) {
         { label: "ShopifyMetaTitle", key: "ShopifyMetaTitle" },
         { label: "ShopifyMetaDescription", key: "ShopifyMetaDescription" },
         { label: "MAP", key: "MAP" },
+        { label: "Updated", key: "Updated" },
+        
       ];    				
       
       
@@ -297,6 +299,7 @@ export default function ExportFile(props) {
 
             let resultReviseEbay = [];
             
+            let updated = Date.now()
 
             for (let item of products){
                 
@@ -329,6 +332,8 @@ export default function ExportFile(props) {
                 let sourceDropship = item.sourceDropship ? item.sourceDropship : false
                 let attributesParse = item.Attributes ? JSON.parse(item.Attributes) : []
                 
+                
+
                 let product = { 
                     SKU: item.SKU, MPN: item.mpn, 
                     BinLocation: item.binLocation,
@@ -337,7 +342,7 @@ export default function ExportFile(props) {
                     SubCategory2: subCategory2Name, Weight: Weight, Height: height, Length: length, Width: width,
                     ShopifyFitmentTags: item.shopifyFitmentTags, ShopifyOnlyTags: item.shopifyOnlyTags, MSRP: MSRP, Cost: item.cost, 
                     ShopifyMetaTitle: item.shopifyMetaTitle, ShopifyMetaDescription: item.shopifyMetaDescription,
-                    MAP: MAP, Image1: image1, Image2: image2, Image3: image3, Image4: image4, Image5: image5,                     
+                    MAP: MAP, Image1: image1, Image2: image2, Image3: image3, Image4: image4, Image5: image5, Updated: updated,                     
                 }
 
                 let n = 0
