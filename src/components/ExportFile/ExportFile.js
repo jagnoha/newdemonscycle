@@ -291,6 +291,7 @@ export default function ExportFile(props) {
                 
                 let brand = props.brands.find(itemBrand => itemBrand.id === item.brandID) 
                 let brandName = brand ? brand.name : ""
+                //let title = item.titleStore ? ( brand.name.includes('Demon') ? item.titleStore : ( item.sourceDropship ? item.titleStore : brandName + ' ' + item.titleStore + ' ' + item.MPN  ) ) : ""                
                 let title = item.titleStore ? item.titleStore : ""                
                 let description = item.descriptionStore ? item.descriptionStore : ""
                 let category = props.categories.find(itemCategory => itemCategory.id === item.categoryID)
@@ -1007,9 +1008,7 @@ const updateImages = async (itemList) => {
           tempList.push({data_url: urlBase + name, file: {type: type, name: name}})        
       }
       
-    }
-
-    //images: JSON.stringify(imageList),
+    }    
     
     let product = await API.graphql(
       graphqlOperation(searchProducts, {
@@ -1028,19 +1027,7 @@ const updateImages = async (itemList) => {
     };
     await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))
     
-    //console.log(JSON.stringify(tempList))
-
-
-      //console.log("=================", itemDetails, "========================")
-      //let result = await API.graphql(graphqlOperation(createProduct, { input: itemDetails }))
-      //console.log(result)
-      /*for (let item of itemList) {
-        console.log(item.SKU)
-        console.log(item.variant_image)
-        console.log(item.image)
-      }*/
-      //console.log(tempList)  
-      //console.log(item)
+    
   } catch (error) {
       console.log(error)
   }
@@ -1048,16 +1035,7 @@ const updateImages = async (itemList) => {
 
 
 const handleUpdateImages = async (excelFile) => {
-  /*let url = 'https://cdn.shopify.com/s/files/1/0338/9682/4876/products/28891013_600x.jpg'
-  const res = await axios.get(url, {responseType: 'arraybuffer'})
   
-  let type = res.headers['content-type']
-  let file = res.data
-  console.log(file)
-  const result = await Storage.put('testbueno8.jpg', file, {
-    level: "public",
-    contentType: type,
-  })*/
   try {
 
     let n = 1
@@ -1084,30 +1062,6 @@ const handleUpdateImages = async (excelFile) => {
           await updateImages(itemList)
 
         }
-        /*console.log("ITEM.SKU: ", item.SKU) 
-        console.log("OLDITEM.SKU: ", oldItem.SKU)
-       
-
-        if (item.SKU && item.SKU !== oldItem.SKU){
-          await updateImages(itemList)
-          itemList = []
-        }   
-
-      
-        
-        if (item.SKU){
-          oldItem = {...item}
-          itemList.push(item)
-        } else {
-          itemList.push(oldItem)
-        }*/
-
-         
-
-        
-        /*console.log("item.SKU: ", item.SKU)
-        console.log("oldItem.SKU: ", oldItem.SKU)*/
-            
 
       }
 
@@ -1116,6 +1070,75 @@ const handleUpdateImages = async (excelFile) => {
     }
 
 }
+
+const readUploadUpdateAnyFields = (e) => {
+  e.preventDefault();
+  if (e.target.files) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+          const data = e.target.result;
+          const workbook = xlsx.read(data, { type: "array" });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const json = xlsx.utils.sheet_to_json(worksheet);
+          //console.log(json);
+          handleUpdateAnyFields(json)
+      };
+      reader.readAsArrayBuffer(e.target.files[0]);
+  }
+}
+
+
+const handleUpdateAnyFields = async (excelFile) => {
+  
+  try {
+
+    let n = 1
+    
+      for (let item of excelFile.slice(1700,2258)){
+        console.log(" **************** ",n++," *************")
+        //console.log(item)
+        console.log("***************************************")       
+        
+        //let SKU = item.SKU
+        //let parentSKU = item.parentSKU
+        await updateAnyFields({SKU: item.SKU, parentSKU: item.parentSKU})
+
+      }
+
+    } catch(error) {
+      console.log(error)
+    }
+
+}
+
+const updateAnyFields = async (item) => {
+  try {
+    
+    let product = await API.graphql(
+      graphqlOperation(searchProducts, {
+        
+        filter: {SKU: { eq: item.SKU }},
+        
+    }))
+
+    let id = product.data.searchProducts.items[0].id
+    let version = product.data.searchProducts.items[0]._version       
+    
+    const productDetails = {
+      id: id,
+      parentSKU: item.parentSKU,
+      _version: version
+    };
+    await API.graphql(graphqlOperation(updateProduct, { input: productDetails }))
+    
+    
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+
 
   const handleUpdateFieldsFromExcel = async (excelFile) => {
     /*let productsTemp = await API.graphql(graphqlOperation(listProducts, {limit: 1000 }))
@@ -1339,6 +1362,16 @@ const handleUpdateImages = async (excelFile) => {
               id="upload"
               onChange={readUploadUpdateImages}
             />*/}
+
+      {/*<Button onClick={()=>handleUpdateAnyFields()}>Upload Any Fields</Button>*/}
+
+      {/*<label htmlFor="upload">Update Fields</label><br></br>
+          <input
+              type="file"
+              name="upload"
+              id="upload"
+              onChange={readUploadUpdateAnyFields}
+          />*/}
 
       </div>
     

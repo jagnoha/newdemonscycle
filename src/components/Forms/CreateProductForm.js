@@ -1,6 +1,6 @@
 import React, {useState, useRef, memo} from 'react'
 import { Form, Checkbox, GridRow, CardContent } from 'semantic-ui-react'
-import { Dropdown, Segment, Header, Icon, Divider, Grid, Accordion, Transition, Button, Card, Image, TextArea } from 'semantic-ui-react'
+import { Dropdown, Segment, Header, Icon, Divider, Grid, Accordion, Transition, Button, Card, Image, TextArea, Input } from 'semantic-ui-react'
 import ImageUploading from 'react-images-uploading'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -92,6 +92,9 @@ export default function CreateProductForm(props) {
   })
   //let statusList = [{key: 1, text: "Active", value: '1'},{key: 0, text: "Draft", value: '0'}]
   const [addImageVisible, setAddImageVisible] = useState(false)
+  const [urlImageVisible, setUrlImageVisible] = useState(false)
+  const [imageUrl, setImageUrl] = useState("")
+  const [seoName, setSeoName] = useState("")
 
   
 
@@ -124,6 +127,20 @@ export default function CreateProductForm(props) {
       matchVisual: false,
     },
   }
+
+  const handleChangeImageUrl = (e) => {
+    //e.persist()
+    //console.log(e.target.value)
+
+    setImageUrl(e.target.value)
+  }
+
+  const handleChangeSEOName = (e) => {
+    //e.persist()
+    setSeoName(e.target.value)
+  }
+
+  
   
   
   return (
@@ -279,33 +296,40 @@ export default function CreateProductForm(props) {
                               </Card.Content>
 
                                   </Card>
-
-                              
-                                  
-                                  
-                                  
-                                  
-                                  
-             
-                                
-                                
-                                
-                            
                             
                             
                             ))}
                             </Card.Group>
                             <Divider />
                             <Button
-                                content={addImageVisible ? 'Cancel' : 'Add Images'}
-                              onClick={() => setAddImageVisible(!addImageVisible)}
+                                content={addImageVisible ? 'Cancel' : 'Upload Images'}
+                              onClick={() => { setAddImageVisible(!addImageVisible);setUrlImageVisible(false);setImageUrl("");setSeoName("") }}
                               icon= {addImageVisible ? "cancel" : "add"}
                               primary = {!addImageVisible}
                               negative = {addImageVisible}
                               //icon = {"add"}
                             />
-                             <Button basic color='red' icon = {"trash"} onClick={onImageRemoveAll} content={"Remove all images"} />
+                            <Button color='orange' icon = {"globe"} onClick={() => { setUrlImageVisible(true); setAddImageVisible(false) }} content={"Get image from URL"} />
+                            <Button basic color='red' icon = {"trash"} onClick={onImageRemoveAll} content={"Remove all images"} />
                            
+                            <Transition visible={urlImageVisible} animation='scale' duration={500}>
+                              
+                              <div style={{marginTop:15}}>
+                              
+                                <Form>
+                                  <Form.Field inline>
+                                    <label>Insert Url: </label>
+                                    <Input type='text'>
+                                      <span style={{paddingRight: 5}}>
+                                      <input value = {imageUrl} onChange={(e) => handleChangeImageUrl(e)} placeholder='Add Url...'/></span><span style={{paddingRight: 5}}>
+                                      <input value = {seoName} onChange={(e) => handleChangeSEOName(e)} placeholder='SEO name' /></span>
+                                      <Button primary icon="cloud upload" onClick={() => { props.handleImageUrl({imageUrl, seoName});setImageUrl("");setSeoName("");setUrlImageVisible(false) }    } />
+                                      <Button negative icon="cancel" onClick={() => { setUrlImageVisible(false);setImageUrl("");setSeoName("") }}/>
+                                    </Input>
+                                  </Form.Field>                                  
+                                </Form>
+                              </div>  
+                              </Transition>
                             
                             <Transition visible={addImageVisible} animation='scale' duration={500}>
                               

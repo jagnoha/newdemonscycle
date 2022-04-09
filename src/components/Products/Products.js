@@ -25,6 +25,7 @@ import Filter from '../Filter/Filter'
 import { DataStore, Predicates, SortDirection } from 'aws-amplify'
 import { Product } from '../../models'
 import { ConsoleLogger } from '@aws-amplify/core'
+import axios from 'axios'
 
 Amplify.configure(aws_exports)
 
@@ -3162,6 +3163,36 @@ const handleImages = (imageList, addUpdateIndex) => {
 
 }
 
+const handleImageUrl = async (image) => {
+  //console.log("IMAGE LIST >>>>>>>>>>>>>", imageList, addUpdateIndex)
+  //console.log("IMAGE LIST >>>",imageList)
+  //console.log(addUpdateIndex)
+  let url = image.imageUrl
+  let seoName = image.seoName
+  let nameFromFile = url.split('/')[url.split('/').length-1].split('?')[0]
+        
+  let name = seoName.length > 0 ? seoName : nameFromFile
+  //let name = nameFromFile
+  const res = await axios.get(url, {responseType: 'arraybuffer'})
+        
+  let type = res.headers['content-type']
+          
+  let file = res.data          
+          
+  const result = await Storage.put(name, file, {
+            level: "public",
+            contentType: type,
+          
+  })
+  //let type = 'image/jpeg'
+  setImages([...images, {data_url: urlBase + name, file: {type: type, name: name}} ])
+
+
+  console.log("IMAGEEEEEEEEEEEEEEEEEEE LIST: ", image)
+  //setImages(imageList)
+
+}
+
 const updateAttributes = async (id) => {
   try {
     let product = products.find(item => item.id === id)
@@ -4082,6 +4113,7 @@ const handleChangeProductsByPage = (e, {value}) => {
                       handleAttributesSelectedValue = {(e) => handleAttributesSelectedValue(e)}
                       handleAttributesSelectedCheckbox = {(e, data) => handleAttributesSelectedCheckbox(data)}
                       handleImages = {(imageList, addUpdateIndex) => handleImages(imageList, addUpdateIndex)}
+                      handleImageUrl = {(value) => handleImageUrl(value)}
                       images = {images} 
                       generateHandle = {() => handleGenerateHandle()}
                       //status = {productForm.status === 'Active' ? true : false} handleStatus = {(e) => handleStatus(e)}
@@ -4178,6 +4210,7 @@ const handleChangeProductsByPage = (e, {value}) => {
                       handleAttributesSelectedValue = {(e) => handleAttributesSelectedValue(e)}
                       handleAttributesSelectedCheckbox = {(e, data) => handleAttributesSelectedCheckbox(data)}
                       handleImages = {(imageList, addUpdateIndex) => handleImages(imageList, addUpdateIndex)}
+                      handleImageUrl = {(value) => handleImageUrl(value)}
                       images = {images} 
                       generateHandle = {() => handleGenerateHandle()}
                       status = {productForm.status} handleStatus = {(e, {value}) => handleStatus(e, {value})}
