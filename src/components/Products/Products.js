@@ -3173,7 +3173,9 @@ const handleImageUrl = async (image) => {
         
   let name = seoName.length > 0 ? seoName : nameFromFile
   //let name = nameFromFile
-  const res = await axios.get(url, {responseType: 'arraybuffer'})
+  const res = await axios.get(url, {responseType: 'arraybuffer',
+      headers: {'Access-Control-Allow-Origin': '*'} 
+  })
         
   let type = res.headers['content-type']
           
