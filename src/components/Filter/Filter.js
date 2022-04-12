@@ -28,6 +28,7 @@ export default function Filter(props) {
         { key: 'Description',text: 'Description',value: 'Description', type: 'textOptions' },
         { key: 'eBay Category Store',text: 'ebay Category Store',value: 'eBay Category Store', type:'ebayCategoryList' },
         { key: 'eBay Price',text: 'eBay Price', value: 'eBay Price', type: 'numberOptions' },
+        { key: 'Images',text: 'Images',value: 'Images', type: 'imageOptions' },        
         { key: 'Manufacturer',text: 'Manufacturer', value: 'Manufacturer', type: 'manufacturerList' },
         { key: 'MPN',text: 'MPN',value: 'MPN', type: 'textOptions' },
         { key: 'MSRP',text: 'MSRP',value: 'MSRP', type: 'numberOptions' },
@@ -45,6 +46,11 @@ export default function Filter(props) {
     const sourceOptions = [
         { key: 'Warehouse',text: 'Warehouse', value: 'Warehouse' },
         { key: 'Dropship',text: 'Dropship', value: 'Dropship' },
+    ]
+
+    const imageOptions = [
+        { key: 'WithoutImages',text: 'without Images', value: 'without Images' },
+        { key: 'WithImages',text: 'with Images', value: 'with Images' },
     ]
 
     const statusOptions = [
@@ -200,6 +206,8 @@ export default function Filter(props) {
             setSecondaryOption(manufacturerList)
         } else if (typeTemp === 'categoryList'){
             setSecondaryOption(categoryList)
+        } else if (typeTemp === 'imageOptions'){
+            setSecondaryOption(imageOptions)
         } else if (typeTemp === 'subCategoryList'){
             setSecondaryOption(subCategoryList)
         } else if (typeTemp === 'subCategoryList2'){
@@ -236,7 +244,10 @@ export default function Filter(props) {
             setReadyToApply(true)            
         } else if (value === 'Warehouse' || value === 'Dropship'){
             setFilterItem({id, field: field, comparation: 'eq', value: value, text: 'is' })
-            setReadyToApply(true) 
+            setReadyToApply(true)
+        } else if (value === 'without Images' || value === 'with Images'){
+            setFilterItem({id, field: field, comparation: 'eq', value: value, text: 'are' })
+            setReadyToApply(true)  
         } else if (field === 'Brand' || field === 'Manufacturer' || field === 'Category' || field === 'SubCategory' || field === 'SubCategory2' || field === 'eBay Category Store'){
             setFilterItem({id, field: field, comparation: 'eq', value: value, text: 'is' })
             setReadyToApply(true)

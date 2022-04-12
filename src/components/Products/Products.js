@@ -1241,6 +1241,16 @@ const parseFilterListNew = (list) => {
       predicate['sourceDropship'] = condition
       newList.push(predicate)
     }
+    if (item.field === 'Images' && item.value === 'without Images'){
+      condition['eq'] = '[]'
+      predicate['images'] = condition
+      newList.push(predicate)
+    }
+    if (item.field === 'Images' && item.value === 'with Images'){
+      condition['ne'] = '[]'  //wildcard: "*Brandel"
+      predicate['images'] = condition
+      newList.push(predicate)
+    }
     if (item.field === 'Brand'){
       let brandIdFinder = brands.find(itemBrand => itemBrand.name.toLowerCase() === item.value.toLowerCase())
       let brandId = brandIdFinder ? brandIdFinder.id : null
